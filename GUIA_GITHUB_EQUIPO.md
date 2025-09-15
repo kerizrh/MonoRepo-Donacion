@@ -200,8 +200,11 @@ git checkout -b mejora/diseño-mobile
 ## 🆘 ¿Necesitas Ayuda?
 
 ### 📞 **Contactos del Equipo**
-- **Líder Técnico**: [Nombre y contacto]
-- **GitHub Admin**: [Nombre y contacto]
+- **Team Leader**: Angel Josué Cortez
+- **GitHub Admin**: Kevin Rivera (DevOps)
+- **Project Manager**: Gerson Balmore López
+- **QA**: Katya Michelle Asencio
+- **Desarrolladores**: Guillermo y Julio César Dávila
 
 ### 🔗 **Recursos Útiles**
 - [Git Handbook](https://guides.github.com/introduction/git-handbook/)

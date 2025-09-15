@@ -96,21 +96,39 @@
 ## 🎯 Roles y Responsabilidades
 
 ### 👨‍💻 **Desarrolladores:**
+- **Guillermo** y **Julio César Dávila**
 - Crear ramas para nuevas funcionalidades
 - Hacer commits descriptivos
 - Crear Pull Requests
 - Revisar código de compañeros
 
-### 👨‍💼 **Líder Técnico:**
+### 👨‍💼 **Team Leader:**
+- **Angel Josué Cortez**
 - Aprobar Pull Requests importantes
 - Resolver conflictos complejos
 - Mantener la calidad del código
 - Configurar herramientas automáticas
 
-### 🎯 **Product Owner:**
+### 🎯 **Project Manager:**
+- **Gerson Balmore López**
 - Revisar funcionalidades completadas
 - Aprobar cambios de UI/UX
 - Priorizar features
+- Coordinar entregas
+
+### 🔧 **DevOps:**
+- **Kevin Rivera**
+- Configurar CI/CD
+- Gestionar infraestructura
+- Automatizar despliegues
+- Mantener herramientas de desarrollo
+
+### 🧪 **QA:**
+- **Katya Michelle Asencio**
+- Revisar funcionalidades completadas
+- Ejecutar pruebas
+- Reportar bugs
+- Validar calidad del código
 
 ---
 
@@ -155,8 +173,11 @@
 ## 🆘 Soporte y Ayuda
 
 ### 📞 **Contactos:**
-- **GitHub Admin**: [Tu nombre]
-- **Líder Técnico**: [Nombre del líder]
+- **GitHub Admin**: Kevin Rivera (DevOps)
+- **Team Leader**: Angel Josué Cortez
+- **Project Manager**: Gerson Balmore López
+- **QA**: Katya Michelle Asencio
+- **Desarrolladores**: Guillermo y Julio César Dávila
 - **Canal Slack**: #donaccion-dev
 
 ### 📚 **Recursos:**
