@@ -13,18 +13,26 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
     - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+      start_period: 40s
 
   backend:
     build: ./backend
     container_name: spring-backend
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     ports:
       - "8080:8080"
     env_file:
     - .env
     networks:
       - app-network
+    restart: on-failure
 
   frontend:
     build: ./frontend

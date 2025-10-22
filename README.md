@@ -116,6 +116,8 @@ Esta es la forma más fácil y completa para levantar todo el proyecto de una ve
    docker-compose up -d --build
    ```
    > **Nota:** Usar `--build` la primera vez para construir las imágenes
+   > 
+   > **Mejora:** El backend ahora espera automáticamente a que MySQL esté completamente listo antes de iniciar.
 
 6. **Esperar a que todos los servicios estén listos:**
    ```bash
@@ -124,8 +126,8 @@ Esta es la forma más fácil y completa para levantar todo el proyecto de una ve
    ```
    
    **Indicadores de que está funcionando:**
-   - MySQL: "ready for connections"
-   - Backend: "Started DonaccionApplication"
+   - MySQL: "ready for connections" + health check exitoso
+   - Backend: "Started DonaccionApplication" (se inicia automáticamente después de MySQL)
    - Frontend: "nginx started"
 
 7. **Verificar que todos los servicios estén funcionando:**
