@@ -2,6 +2,8 @@
 
 Sistema de donaciones con backend Spring Boot y frontend Angular.
 
+> **💻 Compatibilidad:** Este proyecto funciona en Windows, Linux y macOS. Los comandos Docker son universales, pero algunos comandos de diagnóstico varían por sistema operativo.
+
 ## ⚡ Inicio Rápido
 
 **¿Solo quieres levantar el proyecto y empezar a trabajar?**
@@ -32,45 +34,7 @@ docker-compose logs -f
 - Backend: http://localhost:8080
 - API de prueba: http://localhost:8080/api/test
 
-## 🛡️ Seguridad y Protección de Código
-
-### Rama Principal Protegida
-- La rama `main` está protegida y requiere Pull Requests para cambios
-- No se permiten push directos a `main`
-- Todos los cambios deben pasar por revisión de código
-
-### Variables de Entorno
-- ⚠️ **NUNCA** commitees archivos `.env` o `env`
-- Las credenciales de base de datos están en el archivo `env` (ignorado por git)
-- Configura las variables de entorno en tu servidor de producción
-
-### Flujo de Trabajo Recomendado
-
-1. **Para desarrollo diario:**
-   ```bash
-   git checkout develop
-   git pull origin develop
-   # Hacer tus cambios
-   git add .
-   git commit -m "Descripción del cambio"
-   git push origin develop
-   ```
-
-2. **Para subir cambios a producción:**
-   - Crear Pull Request desde `develop` hacia `main`
-   - Solicitar revisión de código
-   - Una vez aprobado, hacer merge
-
-3. **Para features nuevas:**
-   ```bash
-   git checkout develop
-   git checkout -b feature/nombre-de-la-feature
-   # Desarrollar la feature
-   git push origin feature/nombre-de-la-feature
-   # Crear PR hacia develop
-   ```
-
-## 🚀 Cómo Levantar el Proyecto Localmente
+## 🚀 Instalación Detallada
 
 ### Opción 1: Con Docker Compose (Recomendado) 🐳
 
@@ -145,41 +109,6 @@ Esta es la forma más fácil y completa para levantar todo el proyecto de una ve
 - **Health check**: http://localhost:8080/health
 - **API de prueba**: http://localhost:8080/api/test
 
-#### Comandos útiles para gestión
-```bash
-# Ver logs de todos los servicios
-docker-compose logs -f
-
-# Ver logs de un servicio específico
-docker-compose logs -f backend
-docker-compose logs -f frontend
-docker-compose logs -f mysql
-
-# Detener todos los servicios
-docker-compose down
-
-# Reiniciar un servicio específico
-docker-compose restart backend
-
-# Ver el estado de los contenedores
-docker-compose ps
-```
-
-#### Limpieza de Docker
-```bash
-# Limpiar solo el proyecto (recomendado)
-docker-compose down --volumes --remove-orphans
-docker rmi monorepo-donaccion-backend monorepo-donaccion-frontend
-
-# Limpieza completa de Docker (¡CUIDADO!)
-docker rm -f $(docker ps -aq)          # Eliminar TODOS los contenedores
-docker rmi -f $(docker images -q)       # Eliminar TODAS las imágenes
-docker volume prune -f                 # Eliminar TODOS los volúmenes
-docker network prune -f                # Eliminar TODAS las redes
-```
-
-> **⚠️ ADVERTENCIA:** Los comandos de limpieza completa eliminarán **TODOS** los contenedores, imágenes y volúmenes de Docker en tu sistema, no solo los del proyecto.
-
 ### Opción 2: Desarrollo Local (Sin Docker) 💻
 
 Si prefieres desarrollo local, puedes levantar cada servicio por separado:
@@ -247,6 +176,43 @@ SPRING_DATASOURCE_PASSWORD=tu_password
 
 **⚠️ IMPORTANTE:** Este archivo está en `.gitignore` y NO debe subirse a GitHub.
 
+## 🛠️ Gestión y Mantenimiento
+
+### Comandos útiles para gestión
+```bash
+# Ver logs de todos los servicios
+docker-compose logs -f
+
+# Ver logs de un servicio específico
+docker-compose logs -f backend
+docker-compose logs -f frontend
+docker-compose logs -f mysql
+
+# Detener todos los servicios
+docker-compose down
+
+# Reiniciar un servicio específico
+docker-compose restart backend
+
+# Ver el estado de los contenedores
+docker-compose ps
+```
+
+### Limpieza de Docker
+```bash
+# Limpiar solo el proyecto (recomendado)
+docker-compose down --volumes --remove-orphans
+docker rmi monorepo-donaccion-backend monorepo-donaccion-frontend
+
+# Limpieza completa de Docker (¡CUIDADO!)
+docker rm -f $(docker ps -aq)          # Eliminar TODOS los contenedores
+docker rmi -f $(docker images -q)       # Eliminar TODAS las imágenes
+docker volume prune -f                 # Eliminar TODOS los volúmenes
+docker network prune -f                # Eliminar TODAS las redes
+```
+
+> **⚠️ ADVERTENCIA:** Los comandos de limpieza completa eliminarán **TODOS** los contenedores, imágenes y volúmenes de Docker en tu sistema, no solo los del proyecto.
+
 ## 🔧 Troubleshooting
 
 ### Problemas comunes al levantar el proyecto
@@ -273,7 +239,20 @@ unable to get image 'monorepo-donaccion-backend'
 Error starting userland proxy: listen tcp4 0.0.0.0:4200: bind: address already in use
 ```
 **Solución:**
-1. Verificar qué proceso está usando el puerto: `netstat -ano | findstr :4200`
+
+**Windows:**
+```bash
+netstat -ano | findstr :4200
+```
+
+**Linux/macOS:**
+```bash
+netstat -tulpn | grep :4200
+# o alternativamente
+lsof -i :4200
+```
+
+1. Verificar qué proceso está usando el puerto con los comandos anteriores
 2. Detener el proceso o cambiar el puerto en `docker-compose.yml`
 
 #### Error: "Communications link failure" (Base de datos)
@@ -318,6 +297,8 @@ This application has no explicit mapping for /error
 3. Reiniciar los servicios: `docker-compose restart`
 
 ### Comandos de diagnóstico
+
+**Comandos universales (todos los sistemas):**
 ```bash
 # Ver el estado de todos los contenedores
 docker-compose ps
@@ -325,15 +306,69 @@ docker-compose ps
 # Ver logs detallados
 docker-compose logs -f
 
-# Verificar que los puertos estén disponibles
-netstat -ano | findstr :4200
-netstat -ano | findstr :8080
-netstat -ano | findstr :3307
-
 # Reiniciar todo el proyecto
 docker-compose down
 docker-compose up -d
 ```
+
+**Verificar puertos disponibles:**
+
+**Windows:**
+```bash
+netstat -ano | findstr :4200
+netstat -ano | findstr :8080
+netstat -ano | findstr :3307
+```
+
+**Linux/macOS:**
+```bash
+netstat -tulpn | grep :4200
+netstat -tulpn | grep :8080
+netstat -tulpn | grep :3307
+
+# Alternativamente con lsof
+lsof -i :4200
+lsof -i :8080
+lsof -i :3307
+```
+
+## 🛡️ Seguridad y Flujo de Trabajo
+
+### Rama Principal Protegida
+- La rama `main` está protegida y requiere Pull Requests para cambios
+- No se permiten push directos a `main`
+- Todos los cambios deben pasar por revisión de código
+
+### Variables de Entorno
+- ⚠️ **NUNCA** commitees archivos `.env` o `env`
+- Las credenciales de base de datos están en el archivo `env` (ignorado por git)
+- Configura las variables de entorno en tu servidor de producción
+
+### Flujo de Trabajo Recomendado
+
+1. **Para desarrollo diario:**
+   ```bash
+   git checkout develop
+   git pull origin develop
+   # Hacer tus cambios
+   git add .
+   git commit -m "Descripción del cambio"
+   git push origin develop
+   ```
+
+2. **Para subir cambios a producción:**
+   - Crear Pull Request desde `develop` hacia `main`
+   - Solicitar revisión de código
+   - Una vez aprobado, hacer merge
+
+3. **Para features nuevas:**
+   ```bash
+   git checkout develop
+   git checkout -b feature/nombre-de-la-feature
+   # Desarrollar la feature
+   git push origin feature/nombre-de-la-feature
+   # Crear PR hacia develop
+   ```
 
 ## 👥 Contribución
 
@@ -342,4 +377,3 @@ docker-compose up -d
 3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
-
