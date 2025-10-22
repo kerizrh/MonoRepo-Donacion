@@ -163,6 +163,21 @@ docker-compose restart backend
 docker-compose ps
 ```
 
+#### Limpieza de Docker
+```bash
+# Limpiar solo el proyecto (recomendado)
+docker-compose down --volumes --remove-orphans
+docker rmi monorepo-donaccion-backend monorepo-donaccion-frontend
+
+# Limpieza completa de Docker (¡CUIDADO!)
+docker rm -f $(docker ps -aq)          # Eliminar TODOS los contenedores
+docker rmi -f $(docker images -q)       # Eliminar TODAS las imágenes
+docker volume prune -f                 # Eliminar TODOS los volúmenes
+docker network prune -f                # Eliminar TODAS las redes
+```
+
+> **⚠️ ADVERTENCIA:** Los comandos de limpieza completa eliminarán **TODOS** los contenedores, imágenes y volúmenes de Docker en tu sistema, no solo los del proyecto.
+
 ### Opción 2: Desarrollo Local (Sin Docker) 💻
 
 Si prefieres desarrollo local, puedes levantar cada servicio por separado:
