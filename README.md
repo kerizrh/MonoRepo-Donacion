@@ -2,6 +2,36 @@
 
 Sistema de donaciones con backend Spring Boot y frontend Angular.
 
+## ⚡ Inicio Rápido
+
+**¿Solo quieres levantar el proyecto y empezar a trabajar?**
+
+```bash
+# 1. Clonar el repositorio
+git clone <url-del-repositorio>
+cd monorepo-donaccion
+
+# 2. Crear variables de entorno
+echo "MYSQL_ROOT_PASSWORD=rootpassword" > env
+echo "MYSQL_DATABASE=donaccion" >> env
+echo "MYSQL_USER=donaccion_user" >> env
+echo "MYSQL_PASSWORD=donaccion_password" >> env
+echo "SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/donaccion" >> env
+echo "SPRING_DATASOURCE_USERNAME=donaccion_user" >> env
+echo "SPRING_DATASOURCE_PASSWORD=donaccion_password" >> env
+
+# 3. Levantar todo con Docker
+docker-compose up -d --build
+
+# 4. Verificar que esté funcionando
+docker-compose logs -f
+```
+
+**Una vez que veas "Started DonaccionApplication" y "ready for connections":**
+- Frontend: http://localhost:4200
+- Backend: http://localhost:8080
+- API de prueba: http://localhost:8080/api/test
+
 ## 🛡️ Seguridad y Protección de Código
 
 ### Rama Principal Protegida
@@ -58,23 +88,47 @@ Esta es la forma más fácil y completa para levantar todo el proyecto de una ve
    cd monorepo-donaccion
    ```
 
-2. **Abrir Docker Desktop:**
+2. **Crear el archivo de variables de entorno:**
+   ```bash
+   # Crear archivo env en la raíz del proyecto
+   echo "MYSQL_ROOT_PASSWORD=rootpassword" > env
+   echo "MYSQL_DATABASE=donaccion" >> env
+   echo "MYSQL_USER=donaccion_user" >> env
+   echo "MYSQL_PASSWORD=donaccion_password" >> env
+   echo "SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/donaccion" >> env
+   echo "SPRING_DATASOURCE_USERNAME=donaccion_user" >> env
+   echo "SPRING_DATASOURCE_PASSWORD=donaccion_password" >> env
+   ```
+
+3. **Abrir Docker Desktop:**
    - Buscar "Docker Desktop" en el menú de inicio
    - Ejecutar como administrador si es necesario
    - **Esperar** a que esté completamente iniciado (ícono verde en la bandeja del sistema)
 
-3. **Verificar que Docker esté funcionando:**
+4. **Verificar que Docker esté funcionando:**
    ```bash
    docker ps
    ```
    Si ves un error, significa que Docker Desktop no está ejecutándose.
 
-4. **Levantar todo el proyecto:**
+5. **Levantar todo el proyecto:**
    ```bash
-   docker-compose up -d
+   docker-compose up -d --build
    ```
+   > **Nota:** Usar `--build` la primera vez para construir las imágenes
 
-5. **Verificar que todos los servicios estén funcionando:**
+6. **Esperar a que todos los servicios estén listos:**
+   ```bash
+   # Ver logs para verificar que todo esté funcionando
+   docker-compose logs -f
+   ```
+   
+   **Indicadores de que está funcionando:**
+   - MySQL: "ready for connections"
+   - Backend: "Started DonaccionApplication"
+   - Frontend: "nginx started"
+
+7. **Verificar que todos los servicios estén funcionando:**
    ```bash
    docker-compose ps
    ```
@@ -83,6 +137,11 @@ Esta es la forma más fácil y completa para levantar todo el proyecto de una ve
 - **Frontend Angular**: http://localhost:4200
 - **Backend API**: http://localhost:8080
 - **Base de datos MySQL**: localhost:3307
+
+#### Endpoints disponibles del backend
+- **Página principal**: http://localhost:8080/
+- **Health check**: http://localhost:8080/health
+- **API de prueba**: http://localhost:8080/api/test
 
 #### Comandos útiles para gestión
 ```bash
@@ -199,6 +258,41 @@ Error starting userland proxy: listen tcp4 0.0.0.0:4200: bind: address already i
 **Solución:**
 1. Verificar qué proceso está usando el puerto: `netstat -ano | findstr :4200`
 2. Detener el proceso o cambiar el puerto en `docker-compose.yml`
+
+#### Error: "Communications link failure" (Base de datos)
+```
+Communications link failure
+The last packet sent successfully to the server was 0 milliseconds ago
+```
+**Solución:**
+1. **Esperar a que MySQL esté completamente iniciado:**
+   ```bash
+   docker-compose logs mysql
+   # Buscar: "ready for connections"
+   ```
+2. **Si el backend falla al conectar, reiniciarlo:**
+   ```bash
+   docker-compose restart backend
+   ```
+3. **Verificar las variables de entorno en el archivo `env`**
+
+#### Error: "404 Not Found" en el backend
+```
+Whitelabel Error Page
+This application has no explicit mapping for /error
+```
+**Solución:**
+1. Verificar que el backend esté ejecutándose: `docker-compose logs backend`
+2. Probar los endpoints disponibles:
+   - http://localhost:8080/ (página principal)
+   - http://localhost:8080/health (health check)
+   - http://localhost:8080/api/test (API de prueba)
+
+#### Error: "Connection refused" al backend
+**Solución:**
+1. Verificar que el backend esté ejecutándose: `docker-compose ps`
+2. Ver logs del backend: `docker-compose logs backend`
+3. Si hay errores de base de datos, reiniciar: `docker-compose restart backend`
 
 #### Error de conexión a la base de datos
 **Solución:**
