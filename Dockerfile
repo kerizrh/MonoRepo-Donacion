@@ -4,18 +4,15 @@ WORKDIR /app
 
 # Copiar archivos de Maven del backend
 COPY backend/pom.xml ./
-COPY backend/mvnw ./
-# Dar permisos de ejecución al wrapper de Maven
-RUN chmod +x ./mvnw
 
-# Descargar dependencias
-RUN ./mvnw dependency:go-offline -B
+# Usar Maven directamente (más confiable que wrapper)
+RUN mvn dependency:go-offline -B
 
 # Copiar código fuente del backend
 COPY backend/src ./src
 
 # Compilar la aplicación
-RUN ./mvnw clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 # Imagen de producción
 FROM eclipse-temurin:21-jre-alpine
