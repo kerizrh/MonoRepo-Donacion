@@ -14,13 +14,7 @@ git clone <url-del-repositorio>
 cd monorepo-donaccion
 
 # 2. Crear variables de entorno
-echo "MYSQL_ROOT_PASSWORD=rootpassword" > env
-echo "MYSQL_DATABASE=donaccion" >> env
-echo "MYSQL_USER=donaccion_user" >> env
-echo "MYSQL_PASSWORD=donaccion_password" >> env
-echo "SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/donaccion" >> env
-echo "SPRING_DATASOURCE_USERNAME=donaccion_user" >> env
-echo "SPRING_DATASOURCE_PASSWORD=donaccion_password" >> env
+echo "MYSQL_ROOT_PASSWORD" > env
 
 # 3. Levantar todo con Docker
 docker-compose up -d --build
