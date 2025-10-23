@@ -1,0 +1,58 @@
+name: Cleanup After PR Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    # Solo ejecutar si el PR fue mergeado
+    if: github.event.pull_request.merged == true
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+
+      - name: Cleanup old staging backups
+        run: |
+          echo "=== Limpieza de Ramas de Respaldo ==="
+          
+          # Obtener todas las ramas de respaldo de staging
+          BACKUP_BRANCHES=$(git branch -r | grep "staging-backup-" | head -n -5)
+          
+          if [ -n "$BACKUP_BRANCHES" ]; then
+            echo "Ramas de respaldo encontradas:"
+            echo "$BACKUP_BRANCHES"
+            
+            # Eliminar ramas de respaldo antiguas (mantener las 5 más recientes)
+            echo "$BACKUP_BRANCHES" | while read branch; do
+              if [ -n "$branch" ]; then
+                echo "Eliminando rama de respaldo: $branch"
+                git push origin --delete "${branch#origin/}" || true
+              fi
+            done
+            
+            echo "Limpieza de ramas de respaldo completada"
+          else
+            echo "ℹNo hay ramas de respaldo antiguas para limpiar"
+          fi
+
+      - name: Log PR Information
+        run: |
+          echo "=== Información del PR Mergeado ==="
+          echo "PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
+          echo "Autor: ${{ github.event.pull_request.user.login }}"
+          echo "Fecha de merge: $(date)"
+          echo "Commit SHA: ${{ github.event.pull_request.merge_commit_sha }}"
+          echo "====================================="

@@ -1,0 +1,129 @@
+name: Auto Sync Staging Branch
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+  schedule:
+    # Ejecutar diariamente a las 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync-staging:
+    runs-on: ubuntu-latest
+    # Solo ejecutar si es push a main, PR mergeado a main, o ejecución manual
+    if: |
+      github.event_name == 'push' && github.ref == 'refs/heads/main' ||
+      github.event_name == 'pull_request' && github.event.pull_request.merged == true ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+
+      - name: Check if staging needs update
+        id: check-update
+        run: |
+          # Mostrar información del evento que activó el workflow
+          echo "=== Información del Evento ==="
+          echo "Evento: ${{ github.event_name }}"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
+            echo "Autor: ${{ github.event.pull_request.user.login }}"
+            echo "Mergeado: ${{ github.event.pull_request.merged }}"
+          fi
+          echo "Rama: ${{ github.ref }}"
+          echo "==============================="
+          
+          # Verificar si staging está atrás de main
+          git fetch origin
+          BEHIND=$(git rev-list --count origin/main..origin/staging)
+          AHEAD=$(git rev-list --count origin/staging..origin/main)
+          
+          echo "Commits behind: $BEHIND"
+          echo "Commits ahead: $AHEAD"
+          
+          if [ "$AHEAD" -gt 0 ]; then
+            echo "needs-update=true" >> $GITHUB_OUTPUT
+            echo "Staging needs to be updated with $AHEAD commits from main"
+          else
+            echo "needs-update=false" >> $GITHUB_OUTPUT
+            echo "Staging is up to date with main"
+          fi
+
+      - name: Update staging branch
+        if: steps.check-update.outputs.needs-update == 'true'
+        run: |
+          # Cambiar a staging
+          git checkout staging
+          
+          # Crear backup de staging actual
+          git branch staging-backup-$(date +%Y%m%d-%H%M%S)
+          
+          # Hacer merge de main a staging
+          if git merge origin/main --no-edit; then
+            echo "Merge exitoso"
+            # Push de los cambios
+            git push origin staging
+            echo "Staging actualizada exitosamente"
+          else
+            echo "Hubo conflictos en el merge"
+            # Crear un issue para notificar sobre los conflictos
+            git checkout main
+            exit 1
+          fi
+
+      - name: Create issue on merge conflict
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: issue } = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Conflicto al sincronizar staging con main - ${new Date().toISOString().split('T')[0]}`,
+              body: `## Conflicto de Sincronización
+              
+              La sincronización automática de la rama \`staging\` con \`main\` falló debido a conflictos de merge.
+              
+              ### Acciones Requeridas:
+              1. Revisar los conflictos en la rama \`staging\`
+              2. Resolver manualmente los conflictos
+              3. Hacer push de los cambios resueltos
+              
+              ### Enlaces:
+              - [Rama staging](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/staging)
+              - [Rama main](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/main)
+              
+              ### Detalles del Error:
+              - **Workflow**: ${context.workflow}
+              - **Run ID**: ${context.runId}
+              - **Fecha**: ${new Date().toISOString()}
+              
+              ---
+              *Este issue fue creado automáticamente por GitHub Actions*`,
+              labels: ['bug', 'staging-sync', 'needs-attention']
+            });
+            
+            console.log(`Issue creado: ${issue.html_url}`);
+
+      - name: Success notification
+        if: success() && steps.check-update.outputs.needs-update == 'true'
+        run: |
+          echo "Staging branch actualizada exitosamente con los últimos cambios de main"
+          echo "Fecha: $(date)"
+          echo "Commits sincronizados: ${{ steps.check-update.outputs.commits-ahead }}"
