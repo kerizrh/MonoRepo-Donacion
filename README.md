@@ -13,7 +13,7 @@ Sistema de donaciones con backend Spring Boot y frontend Angular.
 git clone <url-del-repositorio>
 cd monorepo-donaccion
 
-# 2. Crear variables de entorno
+# 2. Crear variables de entorno ejemplo
 echo "MYSQL_ROOT_PASSWORD" > env
 
 # 3. Levantar todo con Docker
@@ -49,13 +49,7 @@ Esta es la forma más fácil y completa para levantar todo el proyecto de una ve
 2. **Crear el archivo de variables de entorno:**
    ```bash
    # Crear archivo env en la raíz del proyecto
-   echo "MYSQL_ROOT_PASSWORD=rootpassword" > env
-   echo "MYSQL_DATABASE=donaccion" >> env
-   echo "MYSQL_USER=donaccion_user" >> env
-   echo "MYSQL_PASSWORD=donaccion_password" >> env
-   echo "SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/donaccion" >> env
-   echo "SPRING_DATASOURCE_USERNAME=donaccion_user" >> env
-   echo "SPRING_DATASOURCE_PASSWORD=donaccion_password" >> env
+   echo "MYSQL_ROOT_PASSWORD=rosdfotpasssdfworsfd" > env
    ```
 
 3. **Abrir Docker Desktop:**
