@@ -25,7 +25,7 @@ WORKDIR /opt
 COPY --from=build /app/target/*.jar app.jar
 
 # Configuraciones para Render
-ENV SPRING_PROFILES_ACTIVE=dev
+ENV SPRING_PROFILES_ACTIVE=production
 ENV SERVER_PORT=10000
 
 # Exponer puerto (Render usa el puerto 10000)
