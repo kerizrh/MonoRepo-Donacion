@@ -1,6 +1,9 @@
 # Dockerfile para el servicio principal (Backend)
-FROM maven:3.9.6-openjdk-21 AS build
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
+
+# Instalar Maven
+RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 
 # Copiar archivos de Maven del backend
 COPY backend/pom.xml ./
