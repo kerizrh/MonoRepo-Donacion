@@ -79,11 +79,17 @@ jobs:
           # Crear backup de staging actual
           git branch staging-backup-$(date +%Y%m%d-%H%M%S)
           
-          # Hacer merge de main a staging
+          # Intentar hacer merge de main a staging
           if git merge origin/main --no-edit; then
             echo "Merge exitoso"
-            # Push de los cambios
-            git push origin staging
+            # Intentar push normal primero
+            if git push origin staging; then
+              echo "Push exitoso"
+            else
+              echo "Push falló, intentando con force-with-lease"
+              # Forzar push para resolver conflictos de sincronización
+              git push origin staging --force-with-lease
+            fi
             echo "Staging actualizada exitosamente"
           else
             echo "Hubo conflictos en el merge"
