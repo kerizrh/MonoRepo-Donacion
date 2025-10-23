@@ -2,8 +2,8 @@
 FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
-# Copiar archivos de Maven
-COPY backend/.mvn/ backend/.mvn/
+# Copiar archivos de Maven del backend
+COPY backend/.mvn/ .mvn/
 COPY backend/mvnw backend/pom.xml ./
 RUN ./mvnw dependency:go-offline -B
 
