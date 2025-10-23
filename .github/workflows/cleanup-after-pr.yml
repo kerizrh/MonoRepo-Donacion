@@ -12,6 +12,9 @@ jobs:
     # Solo ejecutar si el PR fue mergeado
     if: github.event.pull_request.merged == true
     
+    permissions:
+      contents: write
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
