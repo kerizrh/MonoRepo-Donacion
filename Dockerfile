@@ -1,11 +1,11 @@
 # Dockerfile para el servicio principal (Backend)
-FROM eclipse-temurin:21-jdk AS build
+FROM maven:3.9.6-openjdk-21 AS build
 WORKDIR /app
 
 # Copiar archivos de Maven del backend
 COPY backend/pom.xml ./
 
-# Usar Maven directamente (más confiable que wrapper)
+# Descargar dependencias
 RUN mvn dependency:go-offline -B
 
 # Copiar código fuente del backend
