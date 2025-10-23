@@ -1,0 +1,58 @@
+services:
+  # Base de datos MySQL
+  - type: pserv
+    name: mysql-donaccion
+    env: docker
+    dockerfilePath: ./Dockerfile.mysql
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        generateValue: true
+      - key: MYSQL_DATABASE
+        value: donaccion
+      - key: MYSQL_USER
+        value: donaccion_user
+      - key: MYSQL_PASSWORD
+        generateValue: true
+    plan: starter
+
+  # Backend Spring Boot
+  - type: web
+    name: backend-donaccion
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: SPRING_DATASOURCE_URL
+        fromService:
+          type: pserv
+          name: mysql-donaccion
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromService:
+          type: pserv
+          name: mysql-donaccion
+          envVarKey: MYSQL_USER
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromService:
+          type: pserv
+          name: mysql-donaccion
+          envVarKey: MYSQL_PASSWORD
+      - key: SERVER_PORT
+        value: 10000
+    plan: starter
+
+  # Frontend Angular
+  - type: web
+    name: frontend-donaccion
+    env: docker
+    dockerfilePath: ./frontend/Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_URL
+        fromService:
+          type: web
+          name: backend-donaccion
+          property: host
+    plan: starter

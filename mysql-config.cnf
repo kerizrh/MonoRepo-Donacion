@@ -1,0 +1,21 @@
+[mysqld]
+# Configuración optimizada para Render
+innodb_buffer_pool_size = 128M
+innodb_log_file_size = 32M
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT
+
+# Configuraciones de conexión
+max_connections = 100
+wait_timeout = 28800
+interactive_timeout = 28800
+
+# Configuraciones de seguridad
+bind-address = 0.0.0.0
+skip-name-resolve = 1
+
+# Configuraciones de logging
+general_log = 0
+slow_query_log = 1
+slow_query_log_file = /var/log/mysql/slow.log
+long_query_time = 2
