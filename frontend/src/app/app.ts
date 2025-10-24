@@ -1,25 +1,26 @@
-import { Component, signal, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { TestService } from './services/test.service';
-import { CommonModule } from '@angular/common';
+import { Component, signal } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, CommonModule],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  standalone: false,
+  styleUrl: './app.css'
 })
-export class App implements OnInit {
-  protected readonly title = signal('frontend');
-  mensaje = signal('Cargando...');
+export class App {
+  public logoutOptions = {
+    logoutParams: {
+      returnTo: window.location.origin
+    }
+  };
+  constructor(public auth: AuthService) {}
 
-  constructor(private testService: TestService) {}
-
-  ngOnInit(): void {
-    this.testService.getMensaje().subscribe({
-      next: (data) => this.mensaje.set(data),
-      error: (err) => this.mensaje.set('Error al conectar con el backend')
+  login(): void {
+    this.auth.loginWithRedirect({
+      authorizationParams: {
+        audience: 'https://donaccion-api',
+        scope: 'openid profile email',        
+      }
     });
   }
 }

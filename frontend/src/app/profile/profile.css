@@ -1,0 +1,7 @@
+.card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+img.rounded-circle {
+  object-fit: cover;
+}
