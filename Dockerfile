@@ -24,12 +24,12 @@ WORKDIR /opt
 # Copiar el JAR compilado
 COPY --from=build /app/target/*.jar app.jar
 
-# Configuraciones para Render
+# Configuraciones por defecto (se pueden sobrescribir)
 ENV SPRING_PROFILES_ACTIVE=production
-ENV SERVER_PORT=10000
+ENV SERVER_PORT=8080
 
-# Exponer puerto (Render usa el puerto 10000)
-EXPOSE 10000
+# Exponer puerto (configurable)
+EXPOSE 8080
 
 # Comando de inicio con configuraciones JVM optimizadas
 ENTRYPOINT ["java", "-Xmx512m", "-Xms256m", "-jar", "app.jar"]
