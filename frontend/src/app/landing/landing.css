@@ -1,10 +1,47 @@
+/* Contenedor principal */
+.container {
+  max-width: 960px;
+}
+
+/* Cards */
 .card {
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 .card-title {
   font-weight: bold;
 }
-.container {
-  max-width: 960px;
+.card i {
+  transition: transform 0.3s;
+}
+.card:hover i {
+  transform: scale(1.2) rotate(-5deg);
+}
+
+/* Botones */
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-warning {
+  transition: all 0.2s ease-in-out;
+}
+.btn-outline-primary:hover,
+.btn-outline-success:hover,
+.btn-outline-warning:hover {
+  transform: scale(1.05);
+}
+
+/* Botón principal */
+.btn-primary {
+  background: linear-gradient(90deg, #007bff, #00c6ff);
+  border: none;
+  box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+  transition: transform 0.2s;
+}
+.btn-primary:hover {
+  transform: scale(1.05);
 }
