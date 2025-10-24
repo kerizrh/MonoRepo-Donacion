@@ -1,0 +1,26 @@
+<div class="container mt-5" *ngIf="auth.user$ | async as user; else loading">
+  <div class="card mx-auto" style="max-width: 480px;">
+    <div class="card-body text-center">
+      <img
+        [src]="user.picture"
+        alt="Foto de perfil"
+        class="rounded-circle mb-3"
+        width="120"
+        height="120"
+      />
+      <h4 class="card-title mb-2">{{ user.name }}</h4>
+      <p class="card-text text-muted">{{ user.email }}</p>
+      <hr />
+      <p class="mb-0"><strong>Estado:</strong> Sesión activa</p>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="container mt-5 text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando perfil...</span>
+    </div>
+    <p class="mt-3">Cargando perfil...</p>
+  </div>
+</ng-template>

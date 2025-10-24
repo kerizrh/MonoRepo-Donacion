@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instalar dependencias
-RUN npm ci --include=dev
+RUN npm install --legacy-peer-deps
 
 # Copiar código fuente
 COPY . .
@@ -20,7 +20,7 @@ RUN npm run build --configuration=production
 FROM nginx:alpine
 
 # Copiar archivos construidos
-COPY --from=build /app/dist/frontend /usr/share/nginx/html
+COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
 
 # Configuración de Nginx para SPA
 COPY nginx.conf /etc/nginx/conf.d/default.conf
