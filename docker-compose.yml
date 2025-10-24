@@ -21,7 +21,9 @@ services:
       start_period: 40s
 
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: spring-backend
     depends_on:
       mysql:
