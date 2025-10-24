@@ -20,7 +20,7 @@ public class PingController {
 
   @GetMapping("/ping")
   public ResponseEntity<String> ping(@AuthenticationPrincipal Jwt jwt) {
-    String email = jwt.getClaim("email");
+    String email = jwt.getClaim("https://donaccion.com/claims/email");
     String mensaje = pingRepository.findById(1L)
       .map(Ping::getMensaje)
       .orElse("pong desde el server");

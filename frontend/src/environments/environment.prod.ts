@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.donaccion.com',
+  apiUrl: 'http://localhost:8080'
 };
