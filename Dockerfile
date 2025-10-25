@@ -1,5 +1,5 @@
 # Dockerfile para el servicio completo (Frontend + Backend)
-FROM node:18-alpine AS frontend-build
+FROM node:20-alpine AS frontend-build
 WORKDIR /app
 
 # Copiar archivos del frontend
