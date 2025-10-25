@@ -28,5 +28,3 @@ services:
     env: docker
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
-    buildCommand: npm run build
-    staticPublishPath: ./dist
