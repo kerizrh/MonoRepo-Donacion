@@ -1,31 +1,35 @@
-FROM node:22-alpine AS build
+# Dockerfile para el frontend (Angular)
+FROM node:20-alpine AS build
 WORKDIR /app
 
 # Copiar archivos de dependencias
 COPY package*.json ./
-
-# Instalar dependencias
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 # Copiar código fuente
 COPY . .
 
-# Configurar variables de entorno para producción
-ENV NODE_ENV=production
-
 # Construir la aplicación
-RUN npm run build --configuration=production
+RUN npm run build
 
-# Imagen de producción con Nginx
+# Imagen de producción con nginx
 FROM nginx:alpine
 
 # Copiar archivos construidos
-COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+COPY --from=build /app/dist/frontend /usr/share/nginx/html
 
-# Configuración de Nginx para SPA
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Configurar nginx
+RUN echo 'server { \
+    listen 80; \
+    server_name localhost; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    location / { \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
-# Exponer puerto 80
+# Exponer puerto
 EXPOSE 80
 
 # Comando de inicio

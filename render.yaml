@@ -1,58 +1,32 @@
 services:
-  # Base de datos MySQL
-  - type: pserv
-    name: mysql-donaccion
-    env: docker
-    dockerfilePath: ./Dockerfile.mysql
-    envVars:
-      - key: MYSQL_ROOT_PASSWORD
-        generateValue: true
-      - key: MYSQL_DATABASE
-        value: donaccion
-      - key: MYSQL_USER
-        value: donaccion_user
-      - key: MYSQL_PASSWORD
-        generateValue: true
-    plan: starter
-
-  # Backend Spring Boot
   - type: web
-    name: backend-donaccion
+    name: donaccion-backend
     env: docker
     dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
     envVars:
-      - key: SPRING_PROFILES_ACTIVE
-        value: production
       - key: SPRING_DATASOURCE_URL
-        fromService:
-          type: pserv
-          name: mysql-donaccion
-          property: connectionString
+        value: ${SPRING_DATASOURCE_URL}
       - key: SPRING_DATASOURCE_USERNAME
-        fromService:
-          type: pserv
-          name: mysql-donaccion
-          envVarKey: MYSQL_USER
+        value: ${SPRING_DATASOURCE_USERNAME}
       - key: SPRING_DATASOURCE_PASSWORD
-        fromService:
-          type: pserv
-          name: mysql-donaccion
-          envVarKey: MYSQL_PASSWORD
-      - key: SERVER_PORT
-        value: 10000
-    plan: starter
+        value: ${SPRING_DATASOURCE_PASSWORD}
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+      - key: SPRING_JPA_SHOW_SQL
+        value: false
+      - key: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+        value: org.hibernate.dialect.MySQL8Dialect
+      - key: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+        value: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI}
+      - key: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_AUDIENCES
+        value: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_AUDIENCES}
+    healthCheckPath: /actuator/health
 
-  # Frontend Angular
   - type: web
-    name: frontend-donaccion
+    name: donaccion-frontend
     env: docker
     dockerfilePath: ./frontend/Dockerfile
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: API_URL
-        fromService:
-          type: web
-          name: backend-donaccion
-          property: host
-    plan: starter
+    dockerContext: ./frontend
+    buildCommand: npm run build
+    staticPublishPath: ./dist
