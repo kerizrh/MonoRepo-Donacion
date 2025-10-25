@@ -70,10 +70,11 @@ ENV SERVER_PORT=8080
 EXPOSE 80 8080
 
 # Script de inicio
-RUN echo '#!/bin/sh \
-nginx & \
-java -Xmx512m -Xms256m -jar app.jar & \
-wait' > /opt/start.sh && chmod +x /opt/start.sh
+RUN echo '#!/bin/sh' > /opt/start.sh && \
+    echo 'nginx &' >> /opt/start.sh && \
+    echo 'java -Xmx512m -Xms256m -jar app.jar &' >> /opt/start.sh && \
+    echo 'wait' >> /opt/start.sh && \
+    chmod +x /opt/start.sh
 
 # Comando de inicio
 ENTRYPOINT ["/opt/start.sh"]
