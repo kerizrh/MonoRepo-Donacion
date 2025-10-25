@@ -4,6 +4,7 @@ services:
     env: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
+    plan: free
     envVars:
       - key: SPRING_DATASOURCE_URL
         value: ${SPRING_DATASOURCE_URL}
@@ -28,3 +29,4 @@ services:
     env: docker
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
+    plan: free
