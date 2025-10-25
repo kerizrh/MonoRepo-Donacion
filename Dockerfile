@@ -44,6 +44,11 @@ COPY --from=backend-build /app/target/*.jar app.jar
 # Copiar el frontend construido
 COPY --from=frontend-build /app/dist /usr/share/nginx/html
 
+# Verificar que el frontend se construyó correctamente
+RUN ls -la /usr/share/nginx/html/ && \
+    echo "Contenido del directorio frontend:" && \
+    find /usr/share/nginx/html/ -type f -name "*.html" -o -name "*.js" -o -name "*.css" | head -10
+
 # Configurar nginx
 RUN echo 'server { \
     listen 80; \
@@ -61,6 +66,9 @@ RUN echo 'server { \
         proxy_set_header X-Forwarded-Proto $scheme; \
     } \
 }' > /etc/nginx/http.d/default.conf
+
+# Verificar configuración de nginx
+RUN echo "Configuración de nginx:" && cat /etc/nginx/http.d/default.conf
 
 # Configuraciones por defecto
 ENV SPRING_PROFILES_ACTIVE=production
