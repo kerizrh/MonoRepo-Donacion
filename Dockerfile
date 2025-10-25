@@ -71,9 +71,8 @@ EXPOSE 80 8080
 
 # Script de inicio
 RUN echo '#!/bin/sh' > /opt/start.sh && \
-    echo 'nginx &' >> /opt/start.sh && \
-    echo 'java -Xmx512m -Xms256m -jar app.jar &' >> /opt/start.sh && \
-    echo 'wait' >> /opt/start.sh && \
+    echo 'nginx' >> /opt/start.sh && \
+    echo 'java -Xmx512m -Xms256m -jar app.jar' >> /opt/start.sh && \
     chmod +x /opt/start.sh
 
 # Comando de inicio
