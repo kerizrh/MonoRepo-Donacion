@@ -1,5 +1,6 @@
 package com.donaccion;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,12 +15,13 @@ public class DonaccionApplication {
 	}
 
 	@Bean
-	public WebMvcConfigurer corsConfigurer() {
+	public WebMvcConfigurer corsConfigurer(@Value("${cors.allowed-origins}") String[] allowedOrigins) {
+		
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/api/**")
-						.allowedOrigins("http://localhost:4200", "http://frontend:4200")
+						.allowedOrigins(allowedOrigins)
 						.allowedMethods("GET", "POST", "PUT", "DELETE")
 						.allowedHeaders("*")
           				.allowCredentials(true);

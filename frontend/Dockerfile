@@ -9,8 +9,10 @@ RUN npm install
 # Copiar código fuente
 COPY . .
 
+ARG BUILD_CONFIG=production
+
 # Construir la aplicación
-RUN npm run build
+RUN npm run build -- --configuration=$BUILD_CONFIG
 
 # Imagen de producción con nginx
 FROM nginx:alpine

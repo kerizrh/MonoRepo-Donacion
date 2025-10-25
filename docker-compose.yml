@@ -44,7 +44,11 @@ services:
       start_period: 60s
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        BUILD_CONFIG: ${BUILD_CONFIG:-production}
     container_name: angular-frontend
     ports:
       - "4200:80"
