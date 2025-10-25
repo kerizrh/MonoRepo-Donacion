@@ -16,7 +16,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copiar archivos construidos
-COPY --from=build /app/dist/frontend /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Configurar nginx
 RUN echo 'server { \
