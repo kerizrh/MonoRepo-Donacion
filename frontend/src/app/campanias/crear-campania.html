@@ -1,0 +1,26 @@
+<div class="wrapper">
+  <h1>Crear campaña OSFL</h1>
+
+  <form (submit)="onSubmit($event)">
+    <label>
+      Nombre de campaña
+      <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Ej. Donación de útiles escolares" required />
+    </label>
+
+    <label>
+      Fecha límite
+      <input type="date" [(ngModel)]="fechaLimite" name="fechaLimite" required />
+    </label>
+
+    <label>
+      Descripción
+      <textarea [(ngModel)]="descripcion" name="descripcion" rows="5" placeholder="Describe la campaña..."></textarea>
+    </label>
+
+    <button type="submit" [disabled]="guardando">
+      {{ guardando ? 'Guardando...' : 'Crear campaña' }}
+    </button>
+  </form>
+
+  <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+</div>

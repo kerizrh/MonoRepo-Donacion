@@ -1,0 +1,23 @@
+--- a/frontend/src/app/app-module.ts
++++ b/frontend/src/app/app-module.ts
+@@
+-import { Ping } from './ping/ping';
++import { Ping } from './ping/ping';
++import { FormsModule } from '@angular/forms';
++import { CrearCampania } from './campanias/crear-campania';
++import { CampaniasService } from './campanias';
+@@
+   imports: [
+     BrowserModule,
+     AppRoutingModule,
++    FormsModule,
+@@
+-    PingService,
++    PingService,
++    CampaniasService,
+@@
+-  bootstrap: [App]
++  declarations: [CrearCampania],
++  bootstrap: [App]
+ })
+ export class AppModule { }

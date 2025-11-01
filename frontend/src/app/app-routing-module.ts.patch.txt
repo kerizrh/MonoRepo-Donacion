@@ -1,0 +1,11 @@
+--- a/frontend/src/app/app-routing-module.ts
++++ b/frontend/src/app/app-routing-module.ts
+@@
+-import { Ping } from './ping/ping';
++import { Ping } from './ping/ping';
++import { CrearCampania } from './campanias/crear-campania';
+@@
+-  { path: 'ping', component: Ping}
++  { path: 'ping', component: Ping},
++  { path: 'campanias/nueva', component: CrearCampania, canActivate: [authGuard] }
+ ];

@@ -1,0 +1,31 @@
+/* Marca */
+.navbar-brand {
+  font-size: 1.4rem;
+  color: #007bff !important;
+}
+
+/* Links */
+.navbar .nav-link {
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+  font-weight: 500;
+}
+.navbar .nav-link:hover {
+  color: #0056b3;
+}
+
+/* Login link */
+.login-link {
+  color: #007bff !important;
+}
+.login-link:hover {
+  color: #0056b3 !important;
+}
+
+/* Logout link */
+.logout-link {
+  color: #dc3545 !important;
+}
+.logout-link:hover {
+  color: #a71d2a !important;
+}

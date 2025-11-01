@@ -1,0 +1,43 @@
+name: Sync staging with main
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Permite ejecutar manualmente
+
+jobs:
+  sync-staging:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Sync staging with main
+        run: |
+          # Cambiar a la rama staging
+          git checkout staging
+          
+          # Hacer merge de main a staging
+          git merge origin/main --no-edit
+          
+          # Push de los cambios
+          git push origin staging
+          
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request (if conflicts)
+        if: failure()
+        run: |
+          echo "Hubo conflictos al sincronizar staging con main"
+          echo "Revisa manualmente los conflictos en la rama staging"

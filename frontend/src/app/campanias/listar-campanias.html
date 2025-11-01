@@ -1,0 +1,26 @@
+<div class="wrapper">
+  <div class="encabezado">
+    <h1>Campañas de donación</h1>
+    <a routerLink="/campanias/nueva" class="btn-primario">Nueva campaña</a>
+  </div>
+
+  <div *ngIf="cargando" class="alert info">Cargando campañas…</div>
+  <div *ngIf="error" class="alert error">{{ error }}</div>
+  <div *ngIf="!cargando && !error && campanias.length === 0" class="alert warn">
+    Aún no hay campañas. Crea la primera.
+  </div>
+
+  <div class="grid" *ngIf="campanias.length">
+    <div class="card" *ngFor="let c of campanias">
+      <div class="card-header">
+        <h3 class="nombre">{{ c.nombre }}</h3>
+        <span class="chip">{{ fechaRestanteTexto(c) }}</span>
+      </div>
+      <p class="descripcion">{{ c.descripcion || 'Sin descripción' }}</p>
+      <div class="meta">
+        <span class="etiqueta">Fecha límite:</span>
+        <span>{{ c.fechaLimite || '—' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

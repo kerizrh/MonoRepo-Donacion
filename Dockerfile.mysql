@@ -1,0 +1,16 @@
+FROM mysql:8.0
+
+# Configuración específica para MySQL en Render
+ENV MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+ENV MYSQL_DATABASE=${MYSQL_DATABASE}
+ENV MYSQL_USER=${MYSQL_USER}
+ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+# Configuraciones adicionales para producción
+COPY ./mysql-config.cnf /etc/mysql/conf.d/custom.cnf
+
+# Puerto por defecto de MySQL
+EXPOSE 3306
+
+# Comando de inicio
+CMD ["mysqld"]

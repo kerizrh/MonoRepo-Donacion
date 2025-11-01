@@ -1,0 +1,26 @@
+name: Notify Sync Status
+
+on:
+  workflow_run:
+    workflows: ["Auto Sync Staging Branch"]
+    types: [completed]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
+    
+    steps:
+      - name: Notify Success
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        run: |
+          echo "Staging branch sincronizada exitosamente"
+          echo "$(date)"
+          # Aquí puedes agregar notificaciones a Slack, Discord, etc.
+          
+      - name: Notify Failure
+        if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+        run: |
+          echo "Falló la sincronización de staging branch"
+          echo "$(date)"
+          # Aquí puedes agregar notificaciones a Slack, Discord, etc.
