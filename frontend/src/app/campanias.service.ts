@@ -8,8 +8,9 @@ import { environment } from '../environments/environment';
 export interface CampaniaPayload {
   nombre: string;
   descripcion: string;
-  fechaLimite: string; // YYYY-MM-DD
-  metaFondos: number; // objetivo a recaudar
+  fechaLimite: string; 
+  metaFondos: number; 
+  imagen?: string | null; 
 }
 
 @Injectable({ providedIn: 'root' })
@@ -27,12 +28,10 @@ export class CampaniasService {
 
   crear(payload: CampaniaPayload): Observable<any> {
     return this.auth.getAccessTokenSilently().pipe(
-      tap(tk => console.log('[crear][token-prefix]', tk?.slice(0, 15))),
       switchMap(token => {
         const headers = this.authHeaders(token);
         return this.http.post<any>(this.apiBase, payload, { headers });
       }),
-      tap(resp => console.log('[crear][resp]', resp)),
       catchError(err => {
         console.error('[crear][error]', err);
         return throwError(() => err);
@@ -42,14 +41,25 @@ export class CampaniasService {
 
   listar(): Observable<any[]> {
     return this.auth.getAccessTokenSilently().pipe(
-      tap(tk => console.log('[listar][token-prefix]', tk?.slice(0, 15))),
       switchMap(token => {
         const headers = this.authHeaders(token);
         return this.http.get<any[]>(this.apiBase, { headers });
       }),
-      tap(list => console.log('[listar][resp]', list)),
       catchError(err => {
         console.error('[listar][error]', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  obtener(id: number): Observable<any> {
+    return this.auth.getAccessTokenSilently().pipe(
+      switchMap(token => {
+        const headers = this.authHeaders(token);
+        return this.http.get<any>(`${this.apiBase}/${id}`, { headers });
+      }),
+      catchError(err => {
+        console.error('[obtener][error]', err);
         return throwError(() => err);
       })
     );

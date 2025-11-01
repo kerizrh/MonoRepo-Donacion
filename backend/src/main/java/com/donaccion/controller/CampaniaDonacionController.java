@@ -21,7 +21,6 @@ public class CampaniaDonacionController {
 
     @GetMapping
     public ResponseEntity<List<CampaniaDonacion>> listar(@AuthenticationPrincipal Jwt jwt) {
-        // Solo verificar que llega un JWT válido; el email podría usarse para auditoría si se requiere
         return ResponseEntity.ok(repository.findAll());
     }
 
@@ -56,4 +55,12 @@ public class CampaniaDonacionController {
         return ResponseEntity.noContent().build();
     }
 
+
+
+  @GetMapping("/{id}")
+  public ResponseEntity<CampaniaDonacion> getById(@PathVariable Long id) {
+    return repository.findById(id)
+        .map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+  }
 }

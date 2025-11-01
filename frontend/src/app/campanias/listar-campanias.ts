@@ -8,9 +8,10 @@ export interface Campania {
   id: number;
   nombre: string;
   descripcion: string;
-  fechaLimite: string; // ISO date (YYYY-MM-DD) desde backend
+  fechaLimite: string; 
   metaFondos: number;
   montoRecaudado: number;
+  imagen?: string | null;
 }
 
 @Component({
@@ -89,11 +90,14 @@ export class ListarCampanias implements OnInit {
 
   saveEdit(c: Campania) {
     if (!this.editId || !this.editNombre || !this.editFechaLimite || this.editMetaFondos == null) return;
-    const payload = {
+    const payload: any = {
+      // conservar campos no editables
       nombre: this.editNombre.trim(),
       descripcion: (this.editDescripcion || '').toString().trim(),
       fechaLimite: this.editFechaLimite,
-      metaFondos: Number(this.editMetaFondos)
+      metaFondos: Number(this.editMetaFondos),
+      imagen: c.imagen ?? null,
+      montoRecaudado: c.montoRecaudado ?? 0
     };
     this.cargando = true;
     this.svc.update(this.editId!, payload).subscribe({
@@ -122,4 +126,7 @@ export class ListarCampanias implements OnInit {
       error: () => { this.cargando = false; }
     });
   }
+
+
+  trackById(_: number, c: Campania) { return c.id; }
 }

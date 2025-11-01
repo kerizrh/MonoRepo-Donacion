@@ -18,6 +18,14 @@
     </label>
 
     <label>
+      Banner (imagen)
+      <input type="file" accept="image/*" (change)="onFile($event)" />
+      <div *ngIf="imagenBase64" style="margin-top:8px;">
+        <img [src]="'data:image/*;base64,' + imagenBase64" alt="Vista previa" style="max-width:100%; max-height:180px; border-radius:8px; display:block;" />
+      </div>
+    </label>
+
+    <label>
       Descripción
       <textarea [(ngModel)]="descripcion" name="descripcion" rows="5" placeholder="Describe la campaña..."></textarea>
     </label>
