@@ -2,6 +2,7 @@ package com.donaccion.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.math.BigDecimal;
 
 @Entity
 public class CampaniaDonacion {
@@ -16,6 +17,12 @@ public class CampaniaDonacion {
     private String descripcion;
 
     private LocalDate fechaLimite;
+
+    @Column(precision = 14, scale = 2)
+    private BigDecimal metaFondos;
+
+    @Column(precision = 14, scale = 2)
+    private BigDecimal montoRecaudado = BigDecimal.ZERO;
 
     @Lob
     private byte[] imagen;
@@ -59,4 +66,22 @@ public class CampaniaDonacion {
     public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
+
+    public BigDecimal getMetaFondos() {
+        return metaFondos;
+    }
+
+    public void setMetaFondos(BigDecimal metaFondos) {
+        this.metaFondos = metaFondos;
+    }
+
+
+    public BigDecimal getMontoRecaudado() {
+        return montoRecaudado;
+    }
+
+    public void setMontoRecaudado(BigDecimal montoRecaudado) {
+        this.montoRecaudado = montoRecaudado;
+    }
+
 }

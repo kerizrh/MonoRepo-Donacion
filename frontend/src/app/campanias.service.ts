@@ -9,6 +9,7 @@ export interface CampaniaPayload {
   nombre: string;
   descripcion: string;
   fechaLimite: string; // YYYY-MM-DD
+  metaFondos: number; // objetivo a recaudar
 }
 
 @Injectable({ providedIn: 'root' })
@@ -17,27 +18,19 @@ export class CampaniasService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  private authHeaders(token: string): HttpHeaders {
+  private authHeaders(token: string | undefined): HttpHeaders {
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token ?? ''}`,
       'Content-Type': 'application/json'
     });
   }
 
   crear(payload: CampaniaPayload): Observable<any> {
-    // Depuración: ver qué enviamos
-    console.log('[crear][payload]', payload);
-
-    return this.auth.getAccessTokenSilently({
-      authorizationParams: {
-        audience: 'https://donaccion-api',
-        scope: 'openid profile email'
-      }
-    }).pipe(
+    return this.auth.getAccessTokenSilently().pipe(
       tap(tk => console.log('[crear][token-prefix]', tk?.slice(0, 15))),
       switchMap(token => {
         const headers = this.authHeaders(token);
-        return this.http.post(this.apiBase, payload, { headers });
+        return this.http.post<any>(this.apiBase, payload, { headers });
       }),
       tap(resp => console.log('[crear][resp]', resp)),
       catchError(err => {
@@ -48,12 +41,7 @@ export class CampaniasService {
   }
 
   listar(): Observable<any[]> {
-    return this.auth.getAccessTokenSilently({
-      authorizationParams: {
-        audience: 'https://donaccion-api',
-        scope: 'openid profile email'
-      }
-    }).pipe(
+    return this.auth.getAccessTokenSilently().pipe(
       tap(tk => console.log('[listar][token-prefix]', tk?.slice(0, 15))),
       switchMap(token => {
         const headers = this.authHeaders(token);
@@ -62,6 +50,32 @@ export class CampaniasService {
       tap(list => console.log('[listar][resp]', list)),
       catchError(err => {
         console.error('[listar][error]', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  update(id: number, payload: CampaniaPayload): Observable<any> {
+    return this.auth.getAccessTokenSilently().pipe(
+      switchMap(token => {
+        const headers = this.authHeaders(token);
+        return this.http.put<any>(`${this.apiBase}/${id}`, payload, { headers });
+      }),
+      catchError(err => {
+        console.error('[update][error]', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  delete(id: number): Observable<void> {
+    return this.auth.getAccessTokenSilently().pipe(
+      switchMap(token => {
+        const headers = this.authHeaders(token);
+        return this.http.delete<void>(`${this.apiBase}/${id}`, { headers });
+      }),
+      catchError(err => {
+        console.error('[delete][error]', err);
         return throwError(() => err);
       })
     );

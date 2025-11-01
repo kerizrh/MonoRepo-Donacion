@@ -15,6 +15,7 @@ export class CrearCampania {
   nombre = '';
   fechaLimite = '';
   descripcion = '';
+  metaFondos = 0;
   guardando = false;
   mensaje = '';
 
@@ -31,7 +32,8 @@ export class CrearCampania {
     this.svc.crear({
       nombre: this.nombre.trim(),
       fechaLimite: this.fechaLimite,
-      descripcion: this.descripcion.trim()
+      descripcion: this.descripcion.trim(),
+      metaFondos: Number(this.metaFondos)
     }).subscribe({
       next: () => {
         this.guardando = false;

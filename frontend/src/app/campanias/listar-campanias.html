@@ -21,6 +21,46 @@
         <span class="etiqueta">Fecha límite:</span>
         <span>{{ c.fechaLimite || '—' }}</span>
       </div>
+      <div class="meta">
+        <span class="etiqueta">Meta a recaudar:</span>
+        <span>{{ c.metaFondos | currency:'USD':'symbol':'1.2-2' }}</span>
+      </div>
+      <div class="progreso" style="margin-top: 8px;">
+        <div class="fila-progreso" style="display:flex; justify-content: space-between; font-size: 0.9rem;">
+          <span>{{ c.montoRecaudado | currency:'USD':'symbol':'1.2-2' }} recaudado</span>
+          <span>{{ progreso(c) }}%</span>
+        </div>
+        <div class="barra-progreso" style="height:10px; background:#eee; border-radius: 999px; overflow:hidden;">
+          <div class="barra" [style.width.%]="progreso(c)" style="height:100%; border-radius:999px;"></div>
+        </div>
+        <div class="meta-texto" style="font-size: 0.85rem; opacity: 0.85; margin-top: 4px;">
+          Meta: {{ c.metaFondos | currency:'USD':'symbol':'1.2-2' }}
+        </div>
+      
+      <div class="acciones" style="display:flex; gap:8px; margin-top:8px;">
+        <button (click)="startEdit(c)" class="btn-secundario">Editar</button>
+        <button (click)="eliminar(c)" class="btn-peligro">Eliminar</button>
+      </div>
+
+      <div *ngIf="editId === c.id" class="editor" style="margin-top:10px; padding:10px; border:1px solid #ddd; border-radius:8px;">
+        <label>Nombre
+          <input type="text" [(ngModel)]="editNombre" />
+        </label>
+        <label>Fecha límite
+          <input type="date" [(ngModel)]="editFechaLimite" />
+        </label>
+        <label>Meta a recaudar (USD)
+          <input type="number" min="0" step="0.01" [(ngModel)]="editMetaFondos" />
+        </label>
+        <label>Descripción
+          <textarea rows="3" [(ngModel)]="editDescripcion"></textarea>
+        </label>
+        <div style="display:flex; gap:8px; margin-top:6px;">
+          <button (click)="saveEdit(c)" class="btn-primario">Guardar</button>
+          <button (click)="cancelEdit()" class="btn-secundario">Cancelar</button>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

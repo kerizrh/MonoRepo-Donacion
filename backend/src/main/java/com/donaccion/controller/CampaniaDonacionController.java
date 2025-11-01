@@ -30,4 +30,30 @@ public class CampaniaDonacionController {
         CampaniaDonacion saved = repository.save(body);
         return ResponseEntity.created(URI.create("/api/campanias/" + saved.getId())).body(saved);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CampaniaDonacion> actualizar(@PathVariable Long id, @RequestBody CampaniaDonacion body, @AuthenticationPrincipal Jwt jwt) {
+        return repository.findById(id)
+            .map(existing -> {
+                existing.setNombre(body.getNombre());
+                existing.setDescripcion(body.getDescripcion());
+                existing.setFechaLimite(body.getFechaLimite());
+                existing.setMetaFondos(body.getMetaFondos());
+                existing.setMontoRecaudado(body.getMontoRecaudado());
+                existing.setImagen(body.getImagen());
+                CampaniaDonacion saved = repository.save(existing);
+                return ResponseEntity.ok(saved);
+            })
+            .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
+        if (!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        repository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
