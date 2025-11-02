@@ -4,6 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 
+import { FormsModule } from '@angular/forms';
+import { CrearCampania } from './campanias/crear-campania';
 import { AuthModule } from '@auth0/auth0-angular';
 import { Profile } from './profile/profile';
 import { Landing } from './landing/landing';
@@ -26,6 +28,7 @@ import { AuthHttpInterceptor } from '@auth0/auth0-angular';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    FormsModule,
     AuthModule.forRoot({
       domain: 'dev-mqyt53ryrq3bewpb.us.auth0.com',
       clientId: 'H0ZSiFN6HqTFuxf7pwMjMDEFEIViO2h5',

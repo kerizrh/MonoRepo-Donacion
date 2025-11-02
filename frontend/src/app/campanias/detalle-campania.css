@@ -1,0 +1,85 @@
+/* Desplazamiento suave al hacer clic en la flecha */
+:root { scroll-behavior: smooth; }
+
+.detalle-wrapper { display: block; }
+
+/* HERO a pantalla completa */
+.hero {
+  height: 100vh;                 /* ocupa toda la altura visible */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;              /* “letterbox” para imágenes horizontales/verticales */
+  position: relative;
+  overflow: hidden;
+}
+
+.hero img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;                   /* mantiene proporción real */
+  height: auto;                  /* imagen completa, sin recorte */
+  object-fit: contain;           /* clave: que se vea completa */
+  display: block;
+}
+
+/* Si no hay imagen, mostramos título centrado en el hero */
+.hero--sin-imagen {
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(180deg, #111, #222);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-decoration: none;
+  font-size: 24px;
+  line-height: 1;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  backdrop-filter: saturate(120%) blur(6px);
+}
+
+/* CONTENIDO DETALLADO */
+.detalle-contenido {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 16px 56px;
+}
+
+.titulo {
+  margin: 0 0 8px 0;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 8px 0 12px;
+}
+
+.barra-progreso {
+  height: 12px;
+  background: #eee;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.barra {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #3b82f6, #22c55e);
+  transition: width 240ms ease;
+}
+
+.descripcion {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  color: #222;
+}

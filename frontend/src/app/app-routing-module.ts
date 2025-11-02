@@ -8,7 +8,26 @@ import { Ping } from './ping/ping';
 const routes: Routes = [
   { path: 'profile', component: Profile, canActivate: [authGuard] },
   { path: '', component: Landing },
-  { path: 'ping', component: Ping}
+  { path: 'ping', component: Ping },
+
+  {
+    path: 'campanias',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./campanias/listar-campanias').then(m => m.ListarCampanias)
+  },
+  {
+    path: 'campanias/nueva',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./campanias/crear-campania').then(m => m.CrearCampania)
+  },
+  {
+    path: 'campanias/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./campanias/detalle-campania').then(m => m.DetalleCampania)
+  },
 ];
 
 @NgModule({

@@ -1,0 +1,39 @@
+<div class="wrapper">
+  <h1>Crear campaña OSFL</h1>
+
+  <form (submit)="onSubmit($event)">
+    <label>
+      Nombre de campaña
+      <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Ej. Donación de útiles escolares" required />
+    </label>
+
+    <label>
+      Fecha límite
+      <input type="date" [(ngModel)]="fechaLimite" name="fechaLimite" required />
+    </label>
+
+    <label>
+      Meta a recaudar (USD)
+      <input type="number" min="0" step="0.01" [(ngModel)]="metaFondos" name="metaFondos" placeholder="Ej. 5000.00" required />
+    </label>
+
+    <label>
+      Banner (imagen)
+      <input type="file" accept="image/*" (change)="onFile($event)" />
+      <div *ngIf="imagenBase64" style="margin-top:8px;">
+        <img [src]="'data:image/*;base64,' + imagenBase64" alt="Vista previa" style="max-width:100%; max-height:180px; border-radius:8px; display:block;" />
+      </div>
+    </label>
+
+    <label>
+      Descripción
+      <textarea [(ngModel)]="descripcion" name="descripcion" rows="5" placeholder="Describe la campaña..."></textarea>
+    </label>
+
+    <button type="submit" [disabled]="guardando">
+      {{ guardando ? 'Guardando...' : 'Crear campaña' }}
+    </button>
+  </form>
+
+  <p class="mensaje" *ngIf="mensaje">{{ mensaje }}</p>
+</div>
