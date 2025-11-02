@@ -22,9 +22,8 @@ public class PingController {
   private PingRepository pingRepository;
 
   @GetMapping("/ping")
-  @PreAuthorize("hasRole('admin')")
   public ResponseEntity<String> ping(@AuthenticationPrincipal Jwt jwt) {
-    if (!tieneRol(jwt, "admin")) {
+    if (!tieneRol(jwt, "administrador")) {
         return ResponseEntity.status(403).body("Acceso denegado: rol insuficiente");
     }
 
