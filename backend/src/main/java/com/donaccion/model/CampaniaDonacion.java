@@ -27,6 +27,9 @@ public class CampaniaDonacion {
     @Lob
     private byte[] imagen;
 
+    @Column(nullable = false, updatable = false)
+    private String usuarioId;
+
     public Long getId() {
         return id;
     }
@@ -82,6 +85,14 @@ public class CampaniaDonacion {
 
     public void setMontoRecaudado(BigDecimal montoRecaudado) {
         this.montoRecaudado = montoRecaudado;
+    }
+
+    public String getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(String usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
 }
