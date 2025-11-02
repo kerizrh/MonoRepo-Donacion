@@ -6,12 +6,19 @@ import { Landing } from './landing/landing';
 import { Ping } from './ping/ping';
 import { roleGuard } from './auth/role-guard';
 import { FailAuth } from './fail-auth/fail-auth';
+import { ExplorarCampaniasComponent } from './explorar-campanias/explorar-campanias';
 
 const routes: Routes = [
   { path: 'profile', component: Profile, canActivate: [authGuard] },
   { path: '', component: Landing },
   { path: 'ping', component: Ping },
   { path: 'fail-auth', component: FailAuth },
+  {
+    path: 'explorar', 
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['donante'] },
+    component: ExplorarCampaniasComponent 
+  },
 
   {
     path: 'campanias',

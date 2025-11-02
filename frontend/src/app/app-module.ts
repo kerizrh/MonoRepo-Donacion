@@ -18,6 +18,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHttpInterceptor } from '@auth0/auth0-angular';
 import { FailAuth } from './fail-auth/fail-auth';
 import { ErrorInterceptor } from './auth/error-interceptor';
+import { ExplorarCampaniasComponent } from './explorar-campanias/explorar-campanias';
+
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -25,13 +28,15 @@ import { ErrorInterceptor } from './auth/error-interceptor';
     Profile,
     Landing,
     Ping,
-    FailAuth
+    FailAuth,
+    ExplorarCampaniasComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
+    NgSelectModule,
     AuthModule.forRoot({
       domain: 'dev-mqyt53ryrq3bewpb.us.auth0.com',
       clientId: 'H0ZSiFN6HqTFuxf7pwMjMDEFEIViO2h5',

@@ -15,6 +15,7 @@ export class App {
   isAuthenticated = false;
   isOsfl = false;
   isAdmin = false;
+  isDonante = false;
 
   constructor(public auth: AuthService) {
     this.auth.isAuthenticated$.subscribe(isAuth => {
@@ -25,6 +26,7 @@ export class App {
       const roles = claims?.['https://donaccion.org/roles'] || [];
       this.isOsfl = roles.includes('osfl');
       this.isAdmin = roles.includes('administrador');
+      this.isDonante = roles.includes('donante');
     });
   }
 

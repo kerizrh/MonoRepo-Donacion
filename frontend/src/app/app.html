@@ -21,6 +21,9 @@
         <li class="nav-item" *ngIf="isAuthenticated && isAdmin">
           <a class="nav-link" routerLink="/ping">Ping (test)</a>
         </li>
+        <li class="nav-item" *ngIf="isAuthenticated && isDonante">
+          <a class="nav-link" routerLink="/explorar">Explorar campañas</a>
+        </li>
       </ul>
 
       <!-- Login / Logout -->

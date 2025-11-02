@@ -1,0 +1,53 @@
+<div class="explorar-wrapper">
+    <h1>Explorar campañas activas</h1>
+
+    <div class="filtros">
+        <!-- Búsqueda -->
+        <input type="text" [(ngModel)]="texto" (input)="aplicarFiltros()" placeholder="Buscar por nombre o descripción"
+            class="input-busqueda" />
+
+        <!-- Filtro por creadores -->
+        <h3>Organizaciones sin fines de lucro</h3>
+        <ng-select [items]="creadoresDisponibles" [multiple]="true" [searchable]="true"
+            placeholder="Selecciona organización" [(ngModel)]="creadoresSeleccionados" (change)="aplicarFiltros()">
+        </ng-select>
+
+        <!-- Filtro por categorías -->
+        <h3>Categorías</h3>
+        <ng-select [items]="categoriasDisponibles" [multiple]="true" [searchable]="true"
+            placeholder="Selecciona categorías" [(ngModel)]="categoriasSeleccionadas" (change)="aplicarFiltros()">
+        </ng-select>
+
+        <!-- Botón limpiar -->
+        <button class="btn-limpiar" (click)="limpiarFiltros()">Limpiar filtros</button>
+    </div>
+
+    <div *ngIf="cargando">Cargando campañas…</div>
+    <div *ngIf="error" class="alert error">{{ error }}</div>
+
+    <!-- Grid de campañas -->
+    <div class="grid">
+        <div class="card" *ngFor="let c of paginadas">
+            <img *ngIf="c.imagen" [src]="'data:image/*;base64,'+c.imagen" alt="Banner" />
+            <h2>{{ c.nombre }}</h2>
+            <p>{{ c.descripcion }}</p>
+            <p><strong>Creador:</strong> {{ c.creadorNombre }}</p>
+            <div class="categorias">
+                <span *ngFor="let cat of c.categorias" class="chip">{{ cat }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controles de paginación -->
+    <div class="paginacion" *ngIf="totalPages() > 1">
+        <button (click)="cambiarPagina(currentPage - 1)" [disabled]="currentPage === 1">Anterior</button>
+
+        <ng-container *ngFor="let p of [].constructor(totalPages()); let i = index">
+            <button (click)="cambiarPagina(i+1)" [class.active]="currentPage === (i+1)">
+                {{ i+1 }}
+            </button>
+        </ng-container>
+
+        <button (click)="cambiarPagina(currentPage + 1)" [disabled]="currentPage === totalPages()">Siguiente</button>
+    </div>
+</div>
