@@ -3,6 +3,7 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CampaniasService } from '../campanias.service';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-crear-campania',
@@ -20,7 +21,27 @@ export class CrearCampania {
   guardando = false;
   mensaje = '';
 
-  constructor(private svc: CampaniasService, private router: Router) {}
+  creadorNombre = '';
+  categorias: string[] = [];
+  nuevaCategoria = '';
+  
+
+  constructor(private svc: CampaniasService, private router: Router, private auth: AuthService) {
+    this.auth.idTokenClaims$.subscribe(claims => {
+      this.creadorNombre = claims?.['name'] || claims?.['email'] || 'Desconocido';
+    });
+  }
+
+  agregarCategoria() {
+    if (this.nuevaCategoria.trim()) {
+      this.categorias.push(this.nuevaCategoria.trim());
+      this.nuevaCategoria = '';
+    }
+  }
+
+  eliminarCategoria(cat: string) {
+    this.categorias = this.categorias.filter(c => c !== cat);
+  }
 
   onSubmit(e: Event) {
     e.preventDefault();
@@ -38,7 +59,9 @@ export class CrearCampania {
       fechaLimite: this.fechaLimite,
       descripcion: this.descripcion.trim(),
       metaFondos: Number(this.metaFondos),
-      imagen: this.imagenBase64
+      imagen: this.imagenBase64,
+      creadorNombre: this.creadorNombre,
+      categorias: this.categorias
     }).subscribe({
       next: () => {
         this.guardando = false;

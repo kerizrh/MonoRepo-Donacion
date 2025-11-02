@@ -66,3 +66,11 @@
 .etiqueta {
   font-weight: 600;
 }
+.chip {
+  display: inline-block;
+  background: #eee;
+  border-radius: 12px;
+  padding: 2px 8px;
+  margin: 2px;
+  font-size: 0.85em;
+}

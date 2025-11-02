@@ -12,6 +12,9 @@ export interface Campania {
   metaFondos: number;
   montoRecaudado: number;
   imagen?: string | null;
+
+  creadorNombre: string;
+  categorias: string[];
 }
 
 @Component({
@@ -31,6 +34,7 @@ export class ListarCampanias implements OnInit {
   editDescripcion = '';
   editFechaLimite = '';
   editMetaFondos: number | null = null;
+  editCategoriasTexto = '';
 
   constructor(private svc: CampaniasService) {}
 
@@ -78,6 +82,7 @@ export class ListarCampanias implements OnInit {
     this.editDescripcion = c.descripcion;
     this.editFechaLimite = c.fechaLimite;
     this.editMetaFondos = c.metaFondos;
+    this.editCategoriasTexto = c.categorias?.join(', ') || '';   // 👈 nuevo
   }
 
   cancelEdit() {
@@ -86,18 +91,23 @@ export class ListarCampanias implements OnInit {
     this.editDescripcion = '';
     this.editFechaLimite = '';
     this.editMetaFondos = null;
+    this.editCategoriasTexto = '';
   }
 
   saveEdit(c: Campania) {
     if (!this.editId || !this.editNombre || !this.editFechaLimite || this.editMetaFondos == null) return;
     const payload: any = {
-      // conservar campos no editables
       nombre: this.editNombre.trim(),
       descripcion: (this.editDescripcion || '').toString().trim(),
       fechaLimite: this.editFechaLimite,
       metaFondos: Number(this.editMetaFondos),
       imagen: c.imagen ?? null,
-      montoRecaudado: c.montoRecaudado ?? 0
+      montoRecaudado: c.montoRecaudado ?? 0,
+      creadorNombre: c.creadorNombre, // conservar
+      categorias: this.editCategoriasTexto
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean)
     };
     this.cargando = true;
     this.svc.update(this.editId!, payload).subscribe({
@@ -126,7 +136,6 @@ export class ListarCampanias implements OnInit {
       error: () => { this.cargando = false; }
     });
   }
-
 
   trackById(_: number, c: Campania) { return c.id; }
 }

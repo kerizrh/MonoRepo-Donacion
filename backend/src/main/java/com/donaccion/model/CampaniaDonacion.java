@@ -2,6 +2,8 @@ package com.donaccion.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.math.BigDecimal;
 
 @Entity
@@ -29,6 +31,14 @@ public class CampaniaDonacion {
 
     @Column(nullable = false, updatable = false)
     private String usuarioId;
+
+    @Column(nullable = false)
+    private String creadorNombre;
+
+    @ElementCollection
+    @CollectionTable(name = "campania_categorias", joinColumns = @JoinColumn(name = "campania_id"))
+    @Column(name = "categoria")
+    private java.util.Set<String> categorias = new java.util.HashSet<>();
 
     public Long getId() {
         return id;
@@ -78,7 +88,6 @@ public class CampaniaDonacion {
         this.metaFondos = metaFondos;
     }
 
-
     public BigDecimal getMontoRecaudado() {
         return montoRecaudado;
     }
@@ -95,4 +104,19 @@ public class CampaniaDonacion {
         this.usuarioId = usuarioId;
     }
 
+    public String getCreadorNombre() {
+        return creadorNombre;
+    }
+
+    public void setCreadorNombre(String creadorNombre) {
+        this.creadorNombre = creadorNombre;
+    }
+
+    public java.util.Set<String> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(java.util.Set<String> categorias) {
+        this.categorias = categorias;
+    }
 }

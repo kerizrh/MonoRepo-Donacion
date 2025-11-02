@@ -11,6 +11,8 @@ export interface CampaniaPayload {
   fechaLimite: string; 
   metaFondos: number; 
   imagen?: string | null; 
+  creadorNombre: string;
+  categorias: string[];
 }
 
 @Injectable({ providedIn: 'root' })

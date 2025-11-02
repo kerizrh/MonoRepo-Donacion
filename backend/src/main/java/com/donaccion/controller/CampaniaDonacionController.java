@@ -58,6 +58,7 @@ public class CampaniaDonacionController {
                     existing.setMetaFondos(body.getMetaFondos());
                     existing.setMontoRecaudado(body.getMontoRecaudado());
                     existing.setImagen(body.getImagen());
+                    existing.setCategorias(body.getCategorias());
                     CampaniaDonacion saved = repository.save(existing);
                     return ResponseEntity.ok(saved);
                 })
