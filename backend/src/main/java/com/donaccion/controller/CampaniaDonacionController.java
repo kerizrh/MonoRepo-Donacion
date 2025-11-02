@@ -22,8 +22,10 @@ public class CampaniaDonacionController {
 
     @GetMapping
     public ResponseEntity<List<CampaniaDonacion>> listar(@AuthenticationPrincipal Jwt jwt) {
+        if (!tieneRol(jwt, "osfl")) {
+            return ResponseEntity.status(403).build();
+        }
         String usuarioId = jwt.getSubject();
-        System.out.println("Usuario ID: " + usuarioId); // Debugging line
         List<CampaniaDonacion> campanias = repository.findByUsuarioId(usuarioId);
         return ResponseEntity.ok(campanias);
     }
@@ -31,6 +33,9 @@ public class CampaniaDonacionController {
     @PostMapping
     public ResponseEntity<CampaniaDonacion> crear(@RequestBody CampaniaDonacion body,
             @AuthenticationPrincipal Jwt jwt) {
+        if (!tieneRol(jwt, "osfl")) {
+            return ResponseEntity.status(403).build();
+        }
         String usuarioId = jwt.getSubject();
         body.setUsuarioId(usuarioId);
         CampaniaDonacion saved = repository.save(body);
@@ -40,6 +45,9 @@ public class CampaniaDonacionController {
     @PutMapping("/{id}")
     public ResponseEntity<CampaniaDonacion> actualizar(@PathVariable Long id, @RequestBody CampaniaDonacion body,
             @AuthenticationPrincipal Jwt jwt) {
+        if (!tieneRol(jwt, "osfl")) {
+            return ResponseEntity.status(403).build();
+        }
         String usuarioId = jwt.getSubject();
         return repository.findById(id)
                 .filter(existing -> existing.getUsuarioId().equals(usuarioId))
@@ -58,6 +66,9 @@ public class CampaniaDonacionController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
+        if (!tieneRol(jwt, "osfl")) {
+            return ResponseEntity.status(403).build();
+        }
         String usuarioId = jwt.getSubject();
 
         Optional<CampaniaDonacion> resultado = repository.findById(id)
@@ -73,6 +84,9 @@ public class CampaniaDonacionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CampaniaDonacion> getById(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
+        if (!tieneRol(jwt, "osfl")) {
+            return ResponseEntity.status(403).build();
+        }
         String usuarioId = jwt.getSubject();
 
         Optional<CampaniaDonacion> resultado = repository.findById(id)
@@ -83,6 +97,11 @@ public class CampaniaDonacionController {
         } else {
             return ResponseEntity.status(403).build();
         }
+    }
+
+    public boolean tieneRol(Jwt jwt, String rol) {
+        List<String> roles = jwt.getClaimAsStringList("https://donaccion.com/claims/roles");
+        return roles != null && roles.contains(rol);
     }
 
 }

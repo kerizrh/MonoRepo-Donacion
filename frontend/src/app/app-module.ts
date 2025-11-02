@@ -16,13 +16,16 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthHttpInterceptor } from '@auth0/auth0-angular';
+import { FailAuth } from './fail-auth/fail-auth';
+import { ErrorInterceptor } from './auth/error-interceptor';
 
 @NgModule({
   declarations: [
     App,
     Profile,
     Landing,
-    Ping
+    Ping,
+    FailAuth
   ],
   imports: [
     BrowserModule,
@@ -44,6 +47,11 @@ import { AuthHttpInterceptor } from '@auth0/auth0-angular';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
       multi: true
     }
   ],
