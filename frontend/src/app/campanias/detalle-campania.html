@@ -1,0 +1,47 @@
+<div class="detalle-wrapper" *ngIf="!cargando; else loadingTpl">
+  <ng-container *ngIf="data; else errorTpl">
+
+  
+    <section class="hero" *ngIf="data.imagen">
+      <img [src]="'data:image/*;base64,' + data.imagen" alt="Banner de campaña" />
+      <a href="#detalleInfo" class="scroll-indicator" aria-label="Ver información">▼</a>
+    </section>
+
+    <section *ngIf="!data.imagen" class="hero hero--sin-imagen">
+      <h1>{{ data.nombre }}</h1>
+      <a href="#detalleInfo" class="scroll-indicator" aria-label="Ver información">▼</a>
+    </section>
+
+    <section id="detalleInfo" class="detalle-contenido">
+      <h1 class="titulo">{{ data.nombre }}</h1>
+
+      <div class="meta">
+        <div><strong>Fecha:</strong> {{ data.fechaLimite }} ({{ fechaTexto }})</div>
+        <div><strong>Meta:</strong> {{ data.metaFondos | currency:'USD':'symbol':'1.2-2' }}</div>
+        <div><strong>Recaudado:</strong> {{ data.montoRecaudado | currency:'USD':'symbol':'1.2-2' }}</div>
+        <div><strong>Progreso:</strong> {{ progreso }}%</div>
+      </div>
+
+      <div class="barra-progreso">
+        <div class="barra" [style.width.%]="progreso"></div>
+      </div>
+
+      <h3>Categorías</h3>
+      <div class="categorias">
+        <span *ngFor="let cat of data.categorias" class="chip">{{ cat }}</span>
+      </div>
+
+      <h3>Descripción</h3>
+      <p class="descripcion">{{ data.descripcion || '—' }}</p>
+    </section>
+
+  </ng-container>
+</div>
+
+<ng-template #loadingTpl>
+  <p>Cargando...</p>
+</ng-template>
+
+<ng-template #errorTpl>
+  <p style="color:#b00;">{{ error || 'No se pudo cargar la campaña.' }}</p>
+</ng-template>
