@@ -1,10 +1,10 @@
-# 🏥 Monorepo Donaccion
+# Monorepo Donaccion
 
 Sistema de donaciones con backend Spring Boot y frontend Angular.
 
-> **💻 Compatibilidad:** Este proyecto funciona en Windows, Linux y macOS. Los comandos Docker son universales, pero algunos comandos de diagnóstico varían por sistema operativo.
+> **Compatibilidad:** Este proyecto funciona en Windows, Linux y macOS. Los comandos Docker son universales, pero algunos comandos de diagnóstico varían por sistema operativo.
 
-## ⚡ Inicio Rápido
+## Inicio Rápido
 
 **¿Solo quieres levantar el proyecto y empezar a trabajar?**
 
@@ -26,9 +26,9 @@ docker-compose logs -f
 **Una vez que veas "Started DonaccionApplication" y "ready for connections":**
 - Frontend: http://localhost:4200
 - Backend: http://localhost:8080
-- API de prueba: http://localhost:8080/api/test
+- Health check: http://localhost:8080/actuator/health
 
-## 🚀 Instalación Detallada
+## Instalación Detallada
 
 ### Opción 1: Con Docker Compose (Recomendado) 🐳
 
@@ -49,7 +49,7 @@ Esta es la forma más fácil y completa para levantar todo el proyecto de una ve
 2. **Crear el archivo de variables de entorno:**
    ```bash
    # Crear archivo env en la raíz del proyecto
-   echo "MYSQL_ROOT_PASSWORD=rosdfotpasssdfworsfd" > env
+
    ```
 
 3. **Abrir Docker Desktop:**
@@ -94,8 +94,8 @@ Esta es la forma más fácil y completa para levantar todo el proyecto de una ve
 
 #### Endpoints disponibles del backend
 - **Página principal**: http://localhost:8080/
-- **Health check**: http://localhost:8080/health
-- **API de prueba**: http://localhost:8080/api/test
+- **Health check**: http://localhost:8080/actuator/health
+- **API de prueba**: http://localhost:8080/api/ping (requiere autenticación JWT)
 
 ### Opción 2: Desarrollo Local (Sin Docker) 💻
 
@@ -119,7 +119,7 @@ npm install
 npm start
 ```
 
-### Opción 3: Híbrido (MySQL en Docker, Apps Locales) 🔄
+### Opción 3: Híbrido (MySQL en Docker, Apps Locales) 
 
 Si quieres usar Docker solo para MySQL y desarrollar localmente:
 
@@ -137,7 +137,7 @@ npm install
 npm start
 ```
 
-## 📋 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 monorepo-donaccion/
@@ -147,7 +147,7 @@ monorepo-donaccion/
 └── .gitignore        # Archivos excluidos del control de versiones
 ```
 
-## 🔐 Variables de Entorno Requeridas
+##  Variables de Entorno Requeridas
 
 Crea un archivo `env` en la raíz del proyecto con:
 
@@ -162,9 +162,9 @@ SPRING_DATASOURCE_USERNAME=tu_usuario
 SPRING_DATASOURCE_PASSWORD=tu_password
 ```
 
-**⚠️ IMPORTANTE:** Este archivo está en `.gitignore` y NO debe subirse a GitHub.
+** IMPORTANTE:** Este archivo está en `.gitignore` y NO debe subirse a GitHub.
 
-## 🛠️ Gestión y Mantenimiento
+##  Gestión y Mantenimiento
 
 ### Comandos útiles para gestión
 ```bash
@@ -201,7 +201,7 @@ docker network prune -f                # Eliminar TODAS las redes
 
 > **⚠️ ADVERTENCIA:** Los comandos de limpieza completa eliminarán **TODOS** los contenedores, imágenes y volúmenes de Docker en tu sistema, no solo los del proyecto.
 
-## 🔧 Troubleshooting
+##  Troubleshooting
 
 ### Problemas comunes al levantar el proyecto
 
@@ -269,8 +269,8 @@ This application has no explicit mapping for /error
 1. Verificar que el backend esté ejecutándose: `docker-compose logs backend`
 2. Probar los endpoints disponibles:
    - http://localhost:8080/ (página principal)
-   - http://localhost:8080/health (health check)
-   - http://localhost:8080/api/test (API de prueba)
+   - http://localhost:8080/actuator/health (health check)
+   - http://localhost:8080/api/ping (API de prueba, requiere autenticación JWT)
 
 #### Error: "Connection refused" al backend
 **Solución:**
@@ -320,7 +320,112 @@ lsof -i :8080
 lsof -i :3307
 ```
 
-## 🛡️ Seguridad y Flujo de Trabajo
+## Despliegue en Producción
+
+### Plataforma: Render
+
+Este proyecto está configurado para desplegarse automáticamente en [Render](https://render.com) usando el archivo `render.yaml`.
+
+**Documentación completa:** Ver [RENDER_DEPLOYMENT.md](./RENDER_DEPLOYMENT.md) para instrucciones detalladas.
+
+#### URLs de Producción
+- **Frontend**: `https://donaccion-frontend.onrender.com`
+- **Backend API**: `https://donaccion-backend.onrender.com`
+- **Health Check**: `https://donaccion-backend.onrender.com/actuator/health`
+
+#### Configuración de Variables de Entorno en Producción
+
+Las variables de entorno deben configurarse manualmente en el Dashboard de Render:
+
+**Backend:**
+- `SPRING_DATASOURCE_URL`
+- `SPRING_DATASOURCE_USERNAME`
+- `SPRING_DATASOURCE_PASSWORD`
+- `SPRING_JPA_HIBERNATE_DDL_AUTO=
+- `SPRING_JPA_SHOW_SQL=
+- `SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=
+- `SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI`
+- `SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_AUDIENCES`
+- `CORS_ALLOWED_ORIGINS`
+
+> **Nota:** El archivo `render.yaml` NO incluye estas variables para evitar sobrescritura durante los deploys.
+
+#### Health Checks y Monitoreo
+
+**Endpoint de Health Check:**
+```bash
+curl https://donaccion-backend.onrender.com/actuator/health
+```
+
+**Respuesta esperada:**
+```json
+{
+  "status": "UP",
+  "components": {
+    "db": {"status": "UP"},
+    "diskSpace": {"status": "UP"}
+  }
+}
+```
+
+**Configuración de Monitores Externos:**
+- **URL a monitorear**: `https://donaccion-backend.onrender.com/actuator/health`
+- **Método**: GET
+- **Código esperado**: 200
+- **Intervalo recomendado**: 5 minutos
+- **Timeout**: 5 segundos
+
+El endpoint `/actuator/health` es público (sin autenticación) y está diseñado para health checks.
+
+#### Rollback y Recuperación
+
+**En caso de un deploy fallido:**
+1. Ve al Dashboard de Render
+2. Selecciona el servicio (backend/frontend)
+3. Ve a la pestaña "Events"
+4. Selecciona el deploy anterior exitoso
+5. Haz clic en "Rollback"
+
+## CI/CD Pipeline
+
+Este proyecto utiliza **GitHub Actions** para automatizar tareas de integración y despliegue.
+
+### Workflows Configurados
+
+** Documentación completa:** Ver [GITHUB_ACTIONS_SYNC.md](./GITHUB_ACTIONS_SYNC.md)
+
+#### 1. Auto Sync Staging (`auto-sync-staging.yml`)
+- **Trigger**: Push a `main` o merge de PR a `main`
+- **Función**: Sincroniza automáticamente la rama `staging` con `main`
+- **Características**:
+  - Crea backups automáticos antes de cada merge
+  - Maneja conflictos creando issues
+  - Ejecución diaria programada (2 AM UTC)
+
+#### 2. Cleanup After PR (`cleanup-after-pr.yml`)
+- **Trigger**: Después de mergear PR a `main`
+- **Función**: Limpia ramas de backup antiguas
+
+#### 3. Notify Sync Status (`notify-sync-status.yml`)
+- **Trigger**: Después de `auto-sync-staging.yml`
+- **Función**: Envía notificaciones del estado de sincronización
+
+### Flujo de CI/CD Completo
+
+1. **Desarrollo** → Trabajas en `develop` o `feature/*`
+2. **Pull Request** → Creas PR hacia `main`
+3. **Review** → El equipo revisa el código
+4. **Merge** → Se aprueba y mergea a `main`
+5. **Auto Sync** → GitHub Actions sincroniza `staging` con `main`
+6. **Render Deploy** → Render detecta cambios y despliega automáticamente
+
+### Ver Estado de Workflows
+
+1. Ve a **Actions** en tu repositorio de GitHub
+2. Revisa los workflows ejecutados
+3. Consulta los logs para debugging
+
+## Seguridad y Flujo de Trabajo
 
 ### Rama Principal Protegida
 - La rama `main` está protegida y requiere Pull Requests para cambios
@@ -328,7 +433,7 @@ lsof -i :3307
 - Todos los cambios deben pasar por revisión de código
 
 ### Variables de Entorno
-- ⚠️ **NUNCA** commitees archivos `.env` o `env`
+-  **NUNCA** commitees archivos `.env` o `env`
 - Las credenciales de base de datos están en el archivo `env` (ignorado por git)
 - Configura las variables de entorno en tu servidor de producción
 
@@ -358,7 +463,7 @@ lsof -i :3307
    # Crear PR hacia develop
    ```
 
-## 👥 Contribución
+## Contribución
 
 1. Fork el proyecto
 2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
