@@ -94,4 +94,23 @@ export class ExplorarCampaniasComponent implements OnInit {
       this.currentPage = p;
     }
   }
+
+  // === agregado para mostrar meta/recaudado/progreso ===
+  fechaRestanteTexto(c: CampaniaPublica): string {
+    const hoy = new Date();
+    const fin = new Date(c.fechaLimite + 'T00:00:00');
+    const ms = fin.getTime() - new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()).getTime();
+    const dias = Math.ceil(ms / (1000 * 60 * 60 * 24));
+    if (dias < 0) return 'Finalizada';
+    if (dias === 0) return 'Hoy vence';
+    if (dias === 1) return '1 día restante';
+    return `${dias} días restantes`;
+  }
+
+  progreso(c: CampaniaPublica): number {
+    if (!c || !c.metaFondos || c.metaFondos <= 0) return 0;
+    const pct = Math.round((Number(c.montoRecaudado || 0) / Number(c.metaFondos)) * 100);
+    return Math.max(0, Math.min(100, pct));
+  }
+
 }
