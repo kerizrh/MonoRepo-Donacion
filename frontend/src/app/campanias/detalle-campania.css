@@ -83,3 +83,14 @@
   line-height: 1.6;
   color: #222;
 }
+.categorias {
+  margin: 8px 0;
+}
+.chip {
+  display: inline-block;
+  background: #eee;
+  border-radius: 12px;
+  padding: 2px 8px;
+  margin: 2px;
+  font-size: 0.85em;
+}

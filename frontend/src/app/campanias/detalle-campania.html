@@ -26,6 +26,11 @@
         <div class="barra" [style.width.%]="progreso"></div>
       </div>
 
+      <h3>Categorías</h3>
+      <div class="categorias">
+        <span *ngFor="let cat of data.categorias" class="chip">{{ cat }}</span>
+      </div>
+
       <h3>Descripción</h3>
       <p class="descripcion">{{ data.descripcion || '—' }}</p>
     </section>

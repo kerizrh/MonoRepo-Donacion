@@ -9,17 +9,32 @@ import { AuthService } from '@auth0/auth0-angular';
 })
 export class App {
   public logoutOptions = {
-    logoutParams: {
-      returnTo: window.location.origin
-    }
+    logoutParams: { returnTo: window.location.origin }
   };
-  constructor(public auth: AuthService) {}
+
+  isAuthenticated = false;
+  isOsfl = false;
+  isAdmin = false;
+  isDonante = false;
+
+  constructor(public auth: AuthService) {
+    this.auth.isAuthenticated$.subscribe(isAuth => {
+      this.isAuthenticated = isAuth;
+    });
+
+    this.auth.idTokenClaims$.subscribe(claims => {
+      const roles = claims?.['https://donaccion.org/roles'] || [];
+      this.isOsfl = roles.includes('osfl');
+      this.isAdmin = roles.includes('administrador');
+      this.isDonante = roles.includes('donante');
+    });
+  }
 
   login(): void {
     this.auth.loginWithRedirect({
       authorizationParams: {
         audience: 'https://donaccion-api',
-        scope: 'openid profile email',        
+        scope: 'openid profile email',
       }
     });
   }

@@ -2,15 +2,8 @@
   <div class="container-fluid">
     <a class="navbar-brand fw-bold" routerLink="/">DonAcción</a>
 
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarContent"
-      aria-controls="navbarContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -19,14 +12,17 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/">Inicio</a>
         </li>
-        <li class="nav-item" *ngIf="auth.isAuthenticated$ | async">
+        <li class="nav-item" *ngIf="isAuthenticated">
           <a class="nav-link" routerLink="/profile">Mi perfil</a>
         </li>
-        <li class="nav-item" *ngIf="auth.isAuthenticated$ | async">
-          <a class="nav-link" routerLink="/dashboard">Mi impacto</a>
+        <li class="nav-item" *ngIf="isAuthenticated && isOsfl">
+          <a class="nav-link" routerLink="/campanias">Mis campañas</a>
         </li>
-        <li class="nav-item" *ngIf="auth.isAuthenticated$ | async">
+        <li class="nav-item" *ngIf="isAuthenticated && isAdmin">
           <a class="nav-link" routerLink="/ping">Ping (test)</a>
+        </li>
+        <li class="nav-item" *ngIf="isAuthenticated && isDonante">
+          <a class="nav-link" routerLink="/explorar">Explorar campañas</a>
         </li>
       </ul>
 

@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CampaniasService } from '../campanias.service';
+import Swal from 'sweetalert2';
+
 
 export interface Campania {
   id: number;
@@ -12,6 +14,9 @@ export interface Campania {
   metaFondos: number;
   montoRecaudado: number;
   imagen?: string | null;
+
+  creadorNombre: string;
+  categorias: string[];
 }
 
 @Component({
@@ -31,6 +36,7 @@ export class ListarCampanias implements OnInit {
   editDescripcion = '';
   editFechaLimite = '';
   editMetaFondos: number | null = null;
+  editCategoriasTexto = '';
 
   constructor(private svc: CampaniasService) {}
 
@@ -78,6 +84,7 @@ export class ListarCampanias implements OnInit {
     this.editDescripcion = c.descripcion;
     this.editFechaLimite = c.fechaLimite;
     this.editMetaFondos = c.metaFondos;
+    this.editCategoriasTexto = c.categorias?.join(', ') || '';
   }
 
   cancelEdit() {
@@ -86,46 +93,116 @@ export class ListarCampanias implements OnInit {
     this.editDescripcion = '';
     this.editFechaLimite = '';
     this.editMetaFondos = null;
+    this.editCategoriasTexto = '';
   }
 
   saveEdit(c: Campania) {
     if (!this.editId || !this.editNombre || !this.editFechaLimite || this.editMetaFondos == null) return;
     const payload: any = {
-      // conservar campos no editables
       nombre: this.editNombre.trim(),
       descripcion: (this.editDescripcion || '').toString().trim(),
       fechaLimite: this.editFechaLimite,
       metaFondos: Number(this.editMetaFondos),
       imagen: c.imagen ?? null,
-      montoRecaudado: c.montoRecaudado ?? 0
+      montoRecaudado: c.montoRecaudado ?? 0,
+      creadorNombre: c.creadorNombre, // conservar
+      categorias: this.editCategoriasTexto
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean)
     };
     this.cargando = true;
     this.svc.update(this.editId!, payload).subscribe({
-      next: () => {
-        this.svc.listar().subscribe({
-          next: (list) => {
-            this.campanias = list as Campania[];
-            this.cargando = false;
-            this.cancelEdit();
-          },
-          error: () => { this.cargando = false; }
+  next: () => {
+    this.svc.listar().subscribe({
+      next: (list) => {
+        this.campanias = list as Campania[];
+        this.cargando = false;
+        this.cancelEdit();
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Cambios guardados',
+          text: 'La campaña fue editada correctamente.',
+          toast: true,
+          timer: 1500,
+          position: 'top-end',
+          showConfirmButton: false
         });
       },
-      error: () => { this.cargando = false; }
+      error: () => { 
+        this.cargando = false; 
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al recargar',
+          text: 'Se guardó, pero no pudimos refrescar el listado.',
+          toast: true,
+          timer: 2000,
+          position: 'top-end',
+          showConfirmButton: false
+        });
+      }
     });
+  },
+  error: () => { 
+    this.cargando = false; 
+    Swal.fire({
+      icon: 'error',
+      title: 'No se guardaron los cambios',
+      text: 'Ocurrió un problema al editar la campaña.',
+      toast: true,
+      timer: 2000,
+      position: 'top-end',
+      showConfirmButton: false
+    });
+  }
+});
   }
 
   eliminar(c: Campania) {
-    if (!confirm('¿Eliminar esta campaña?')) return;
-    this.cargando = true;
-    this.svc.delete(c.id).subscribe({
-      next: () => {
-        this.campanias = this.campanias.filter(x => x.id !== c.id);
-        this.cargando = false;
-      },
-      error: () => { this.cargando = false; }
-    });
-  }
+  Swal.fire({
+    title: '¿Eliminar campaña?',
+    text: `La campaña "${c.nombre}" será eliminada permanentemente.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.cargando = true;
+      this.svc.delete(c.id).subscribe({
+        next: () => {
+          this.campanias = this.campanias.filter(x => x.id !== c.id);
+          this.cargando = false;
+
+          // ✅ Toast de confirmación exitosa
+          Swal.fire({
+            icon: 'success',
+            title: 'Campaña eliminada',
+            toast: true,
+            timer: 1500,
+            position: 'top-end',
+            showConfirmButton: false
+          });
+        },
+        error: () => {
+          this.cargando = false;
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al eliminar campaña',
+            text: 'Ocurrió un problema, inténtalo nuevamente.',
+            toast: true,
+            timer: 2000,
+            position: 'top-end',
+            showConfirmButton: false
+          });
+        }
+      });
+    }
+  });
+}
 
 
   trackById(_: number, c: Campania) { return c.id; }

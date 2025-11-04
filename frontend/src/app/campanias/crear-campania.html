@@ -5,23 +5,29 @@
     <label>
       Nombre de campaña
       <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Ej. Donación de útiles escolares" required />
+      <small class="text-muted">(Obligatorio).</small>
     </label>
 
     <label>
-      Fecha límite
-      <input type="date" [(ngModel)]="fechaLimite" name="fechaLimite" required />
+  Fecha límite
+  <input
+      type="date" [(ngModel)]="fechaLimite" name="fechaLimite" [min]="minDate" required />
+      <small class="text-muted">(Obligatorio) Debe ser a partir de {{ minDate }} (hoy + 2 días).</small>
     </label>
+
 
     <label>
       Meta a recaudar (USD)
-      <input type="number" min="0" step="0.01" [(ngModel)]="metaFondos" name="metaFondos" placeholder="Ej. 5000.00" required />
+      <input type="number" min="1" step="0.01" [(ngModel)]="metaFondos" name="metaFondos" placeholder="Ej. 5000.00" required />
+      <small class="text-muted">(Obligatorio).</small>
     </label>
 
     <label>
       Banner (imagen)
       <input type="file" accept="image/*" (change)="onFile($event)" />
       <div *ngIf="imagenBase64" style="margin-top:8px;">
-        <img [src]="'data:image/*;base64,' + imagenBase64" alt="Vista previa" style="max-width:100%; max-height:180px; border-radius:8px; display:block;" />
+        <img [src]="'data:image/*;base64,' + imagenBase64" alt="Vista previa"
+          style="max-width:100%; max-height:180px; border-radius:8px; display:block;" />
       </div>
     </label>
 
@@ -29,6 +35,22 @@
       Descripción
       <textarea [(ngModel)]="descripcion" name="descripcion" rows="5" placeholder="Describe la campaña..."></textarea>
     </label>
+
+    <label>
+      Categorías
+      <div style="display:flex; gap:8px; margin-bottom:8px;">
+        <input type="text" [(ngModel)]="nuevaCategoria" name="nuevaCategoria" placeholder="Ej. educación" required />
+        <button type="button" (click)="agregarCategoria()">Agregar</button>
+      </div>
+      <div class="chips">
+        <span *ngFor="let cat of categorias" class="chip">
+          {{ cat }}
+          <button type="button" (click)="eliminarCategoria(cat)">x</button>
+        </span>
+      </div>
+      <small class="text-muted">(Obligatorio).</small>
+    </label>
+
 
     <button type="submit" [disabled]="guardando">
       {{ guardando ? 'Guardando...' : 'Crear campaña' }}

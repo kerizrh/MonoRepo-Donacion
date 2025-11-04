@@ -1,0 +1,16 @@
+.fail-auth {
+  text-align: center;
+  margin-top: 5rem;
+  color: #b00020;
+}
+
+.fail-auth h1 {
+  font-size: 2rem;
+}
+
+.fail-auth a {
+  margin-top: 1rem;
+  display: inline-block;
+  color: #1976d2;
+  text-decoration: underline;
+}
