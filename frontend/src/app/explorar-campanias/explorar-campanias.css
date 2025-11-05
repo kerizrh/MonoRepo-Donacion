@@ -188,3 +188,70 @@
   font-weight: bold;
 }
 
+.sin-campanias-inicial {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #555;
+}
+
+.sin-coincidencias {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #555;
+}
+
+.card .encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.card .encabezado h2 {
+  margin: 0;
+  flex: 1;
+}
+
+.card .encabezado .fecha {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: normal;
+}
+
+.card .descripcion {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.card .meta {
+  margin: 0.75rem 0;
+  font-size: 0.9rem;
+}
+
+.card .meta > div {
+  margin: 0.25rem 0;
+}
+
+.card .meta .progreso {
+  font-weight: bold;
+  color: #1976d2;
+}
+
+.barra-progreso {
+  width: 100%;
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.barra-progreso .barra {
+  height: 100%;
+  background: #1976d2;
+  transition: width 0.3s ease;
+}
