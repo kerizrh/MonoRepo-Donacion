@@ -1,53 +1,91 @@
 <div class="explorar-wrapper">
-    <h1>Explorar campañas activas</h1>
+  <h1>Explorar campañas activas</h1>
 
-    <div class="filtros">
-        <!-- Búsqueda -->
-        <input type="text" [(ngModel)]="texto" (input)="aplicarFiltros()" placeholder="Buscar por nombre o descripción"
-            class="input-busqueda" />
+  <div class="filtros">
+    <!-- Búsqueda -->
+    <input type="text"
+           [(ngModel)]="texto"
+           (input)="aplicarFiltros()"
+           placeholder="Buscar por nombre o descripción"
+           class="input-busqueda" />
 
-        <!-- Filtro por creadores -->
-        <h3>Organizaciones sin fines de lucro</h3>
-        <ng-select [items]="creadoresDisponibles" [multiple]="true" [searchable]="true"
-            placeholder="Selecciona organización" [(ngModel)]="creadoresSeleccionados" (change)="aplicarFiltros()">
-        </ng-select>
+    <!-- Filtro por creadores -->
+    <h3>Organizaciones sin fines de lucro</h3>
+    <ng-select [items]="creadoresDisponibles"
+               [multiple]="true"
+               [searchable]="true"
+               placeholder="Selecciona organización"
+               [(ngModel)]="creadoresSeleccionados"
+               (change)="aplicarFiltros()" [notFoundText]="'No se encuentra la organización buscada'">
+    </ng-select>
 
-        <!-- Filtro por categorías -->
-        <h3>Categorías</h3>
-        <ng-select [items]="categoriasDisponibles" [multiple]="true" [searchable]="true"
-            placeholder="Selecciona categorías" [(ngModel)]="categoriasSeleccionadas" (change)="aplicarFiltros()">
-        </ng-select>
+    <!-- Filtro por categorías -->
+    <h3>Categorías</h3>
+    <ng-select [items]="categoriasDisponibles"
+               [multiple]="true"
+               [searchable]="true"
+               placeholder="Selecciona categorías"
+               [(ngModel)]="categoriasSeleccionadas"
+               (change)="aplicarFiltros()" [notFoundText]="'No se encuentra la categoría buscada'">
+</ng-select>
 
-        <!-- Botón limpiar -->
-        <button class="btn-limpiar" (click)="limpiarFiltros()">Limpiar filtros</button>
+    <!-- Botón limpiar -->
+    <button class="btn-limpiar" (click)="limpiarFiltros()">Limpiar filtros</button>
+  </div>
+
+  <!-- Mensaje inicial: no hay campañas en la plataforma -->
+  <div *ngIf="!cargando && campanias.length === 0" class="sin-campanias-inicial">
+    No hay campañas activas disponibles en este momento
+  </div>
+  <!-- Cuando hay campañas en la plataforma pero ninguna coincide con la búsqueda -->
+  <div *ngIf="!cargando && campanias.length > 0 && campaniasFiltradas.length === 0" 
+      class="sin-coincidencias">
+     No existen campañas que coincidan con la búsqueda
+  </div>
+
+
+  <div *ngIf="cargando">Cargando campañas…</div>
+  <div *ngIf="error" class="alert error">{{ error }}</div>
+
+  <!-- Grid de campañas -->
+  <div class="grid" *ngIf="campanias.length > 0">
+    <div class="card" *ngFor="let c of paginadas" [routerLink]="['/campanias', c.id]" style="cursor:pointer;">
+      <img *ngIf="c.imagen" class="banner" [src]="'data:image/*;base64,'+c.imagen" alt="Banner" />
+
+      <div class="encabezado">
+        <h2>{{ c.nombre }}</h2>
+        <div class="fecha">{{ fechaRestanteTexto(c) }}</div>
+      </div>
+
+      <p class="descripcion">{{ c.descripcion }}</p>
+      <p><strong>Creador:</strong> {{ c.creadorNombre }}</p>
+
+      <div class="meta">
+        <div><strong>Meta:</strong> {{ c.metaFondos | currency:'USD':'symbol':'1.2-2' }}</div>
+        <div><strong>Recaudado:</strong> {{ c.montoRecaudado | currency:'USD':'symbol':'1.2-2' }}</div>
+        <div class="progreso"><strong>Progreso:</strong> <span>{{ progreso(c) }}%</span></div>
+      </div>
+
+      <div class="barra-progreso">
+        <div class="barra" [style.width.%]="progreso(c)"></div>
+      </div>
+
+      <div class="categorias">
+        <span *ngFor="let cat of c.categorias" class="chip">{{ cat }}</span>
+      </div>
     </div>
+  </div>
 
-    <div *ngIf="cargando">Cargando campañas…</div>
-    <div *ngIf="error" class="alert error">{{ error }}</div>
+  <!-- Controles de paginación -->
+  <div class="paginacion" *ngIf="totalPages() > 1">
+    <button (click)="cambiarPagina(currentPage - 1)" [disabled]="currentPage === 1">Anterior</button>
 
-    <!-- Grid de campañas -->
-    <div class="grid">
-        <div class="card" *ngFor="let c of paginadas">
-            <img *ngIf="c.imagen" [src]="'data:image/*;base64,'+c.imagen" alt="Banner" />
-            <h2>{{ c.nombre }}</h2>
-            <p>{{ c.descripcion }}</p>
-            <p><strong>Creador:</strong> {{ c.creadorNombre }}</p>
-            <div class="categorias">
-                <span *ngFor="let cat of c.categorias" class="chip">{{ cat }}</span>
-            </div>
-        </div>
-    </div>
+    <ng-container *ngFor="let p of [].constructor(totalPages()); let i = index">
+      <button (click)="cambiarPagina(i+1)" [class.active]="currentPage === (i+1)">
+        {{ i+1 }}
+      </button>
+    </ng-container>
 
-    <!-- Controles de paginación -->
-    <div class="paginacion" *ngIf="totalPages() > 1">
-        <button (click)="cambiarPagina(currentPage - 1)" [disabled]="currentPage === 1">Anterior</button>
-
-        <ng-container *ngFor="let p of [].constructor(totalPages()); let i = index">
-            <button (click)="cambiarPagina(i+1)" [class.active]="currentPage === (i+1)">
-                {{ i+1 }}
-            </button>
-        </ng-container>
-
-        <button (click)="cambiarPagina(currentPage + 1)" [disabled]="currentPage === totalPages()">Siguiente</button>
-    </div>
+    <button (click)="cambiarPagina(currentPage + 1)" [disabled]="currentPage === totalPages()">Siguiente</button>
+  </div>
 </div>

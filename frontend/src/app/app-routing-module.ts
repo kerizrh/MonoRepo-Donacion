@@ -15,29 +15,29 @@ const routes: Routes = [
   { path: 'fail-auth', component: FailAuth },
   {
     path: 'explorar', 
-    canActivate: [authGuard, roleGuard],
+    canActivate: [authGuard],
     data: { roles: ['donante'] },
     component: ExplorarCampaniasComponent 
   },
 
   {
     path: 'campanias',
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['osfl'] },
+    canActivate: [authGuard],
+    data: { roles: ['osfl','donante'] },
     loadComponent: () =>
       import('./campanias/listar-campanias').then(m => m.ListarCampanias)
   },
   {
     path: 'campanias/nueva',
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['osfl'] },
+    canActivate: [authGuard],
+    data: { roles: ['osfl','donante'] },
     loadComponent: () =>
       import('./campanias/crear-campania').then(m => m.CrearCampania)
   },
   {
     path: 'campanias/:id',
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['osfl'] },
+    canActivate: [authGuard],
+    data: { roles: ['osfl','donante'] },
     loadComponent: () =>
       import('./campanias/detalle-campania').then(m => m.DetalleCampania)
   },
