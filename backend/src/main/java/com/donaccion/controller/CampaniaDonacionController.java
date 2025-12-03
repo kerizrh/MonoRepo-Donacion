@@ -10,6 +10,7 @@ import com.donaccion.model.CampaniaDonacion;
 import com.donaccion.repository.CampaniaDonacionRepository;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,15 +86,32 @@ public class CampaniaDonacionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CampaniaDonacion> getById(@PathVariable Long id, @AuthenticationPrincipal Jwt jwt) {
-    if (!(tieneRol(jwt, "donante") || tieneRol(jwt, "osfl"))) {
-        return ResponseEntity.status(403).build();
+        Optional<CampaniaDonacion> optional = repository.findById(id);
+        if (optional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        CampaniaDonacion campania = optional.get();
+        LocalDate hoy = LocalDate.now();
+
+        boolean esOsfl = tieneRol(jwt, "osfl");
+        boolean esDonante = tieneRol(jwt, "donante");
+        String usuarioId = jwt.getSubject();
+
+        if (campania.getFechaLimite().isBefore(hoy)) {
+            if (esOsfl && campania.getUsuarioId().equals(usuarioId)) {
+                return ResponseEntity.ok(campania);
+            } else {
+                return ResponseEntity.status(403).build();
+            }
+        } else {
+            if (esOsfl || esDonante) {
+                return ResponseEntity.ok(campania);
+            } else {
+                return ResponseEntity.status(403).build();
+            }
+        }
     }
-
-    return repository.findById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
-}
-
 
     public boolean tieneRol(Jwt jwt, String rol) {
         List<String> roles = jwt.getClaimAsStringList("https://donaccion.com/claims/roles");
