@@ -92,4 +92,14 @@ export class CampaniasService {
       })
     );
   }
+
+  donar(campaniaId: number, monto: number): Observable<any> {
+    return this.auth.getAccessTokenSilently().pipe(
+      switchMap(token => {
+        const headers = this.authHeaders(token);
+        const url = `${environment.apiUrl}/api/donaciones`; 
+        return this.http.post(url, { campaniaId, monto }, { headers });
+      })
+    );
+  }
 }

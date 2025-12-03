@@ -1,1 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Estilos para el input de donación de SweetAlert */
+
+/* Clases para centrar y achicar el input */
+.swal-input-monto {
+    max-width: 300px !important; /* Achica el ancho del input */
+    margin: 1.5em auto 1.5em auto !important; /* Centra horizontalmente */
+    text-align: center !important; /* Centra el texto dentro del input */
+}
+
+/* 1. Ocultar Flechas (Spinners) */
+.swal-input-monto::-webkit-inner-spin-button,
+.swal-input-monto::-webkit-outer-spin-button {
+    -webkit-appearance: none !important; /* Webkit (Chrome, Safari) */
+    margin: 0 !important;
+}
+.swal-input-monto {
+    -moz-appearance: textfield !important; /* Firefox */
+}
