@@ -105,13 +105,13 @@ export class DetalleCampania implements OnInit {
             placeholder: 'Ej. 10.00'
         },
         customClass: { 
-            input: 'swal-input-monto' // Usa la clase CSS para achicar y centrar
+            input: 'swal-input-monto'
         },
         showCancelButton: true,
         confirmButtonText: 'Donar esta cantidad',
-        cancelButtonText: 'Cancelar', // <-- Texto corregido
-        confirmButtonColor: '#16a34a', // <-- Color verde
-        cancelButtonColor: '#d33',     // <-- Color rojo
+        cancelButtonText: 'Cancelar', 
+        confirmButtonColor: '#16a34a', 
+        cancelButtonColor: '#d33',      
         
         preConfirm: (monto) => {
             const manualAmount = Number(monto);
@@ -147,8 +147,8 @@ export class DetalleCampania implements OnInit {
             </div>
         `,
         focusConfirm: false,
-        showCancelButton: false, // Ocultamos el botón Cancelar nativo
-        showConfirmButton: false, // Ocultamos el botón Confirmar nativo
+        showCancelButton: false, 
+        showConfirmButton: false, 
         didOpen: () => {
             // 1. Listeners para los botones de monto rápido
             const buttons = document.querySelectorAll('.amount-btn');
@@ -170,7 +170,7 @@ export class DetalleCampania implements OnInit {
             
             // 3. Listener para el botón 'Cancelar'
             document.getElementById('cancel-custom-btn')?.addEventListener('click', () => {
-                Swal.close(); // Cierra el modal A
+                Swal.close(); // Cierra el modal 
             });
         }
     });
