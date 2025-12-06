@@ -1,1 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Estilos para el input de donación de SweetAlert */
+
+/* Clases para centrar y achicar el input */
+.swal-input-monto {
+    max-width: 300px !important; /* Achica el ancho del input */
+    margin: 1.5em auto 1.5em auto !important; /* Centra horizontalmente */
+    text-align: center !important; /* Centra el texto dentro del input */
+}
+
+/* 1. Ocultar Flechas (Spinners) */
+.swal-input-monto::-webkit-inner-spin-button,
+.swal-input-monto::-webkit-outer-spin-button {
+    -webkit-appearance: none !important; /* Webkit (Chrome, Safari) */
+    margin: 0 !important;
+}
+.swal-input-monto {
+    -moz-appearance: textfield !important; /* Firefox */
+}
+
+.logo-donaccion {
+  height: 60px;
+  width: auto;
+  filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.25));
+}
+
+/* Fondo coral oscuro */
+.navbar {
+  background-color: #F5EDE2 !important;
+}
+
+/* Color del texto del header */
+.navbar .nav-link,
+.navbar .navbar-brand,
+.navbar .nav-link:visited {
+  color: #6B4F3A !important;
+  font-weight: 800;
+}
+
+/* Hover más claro */
+.navbar .nav-link:hover {
+  color: #35271d !important;
+}
+
+/* Botón toggler en móvil */
+.navbar-light .navbar-toggler-icon {
+  filter: invert(1); /* Hace icono blanco */
+}

@@ -1,5 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
+import { CampaniasService } from './campanias.service';
+
 
 @Component({
   selector: 'app-root',
@@ -17,16 +19,39 @@ export class App {
   isAdmin = false;
   isDonante = false;
 
-  constructor(public auth: AuthService) {
+  puntos: number | null = null;
+
+  constructor(public auth: AuthService, private CampaniasService: CampaniasService) {
     this.auth.isAuthenticated$.subscribe(isAuth => {
       this.isAuthenticated = isAuth;
+      if (isAuth && this.isDonante) {
+        this.cargarPuntos();
+      } else {
+        this.puntos = null;
+      }
     });
+
+    this.CampaniasService.puntosActualizados$.subscribe(puntos => {
+      if (puntos !== null) {
+        this.puntos = puntos; // actualizar header en tiempo real
+      }
+    });
+
 
     this.auth.idTokenClaims$.subscribe(claims => {
       const roles = claims?.['https://donaccion.org/roles'] || [];
       this.isOsfl = roles.includes('osfl');
       this.isAdmin = roles.includes('administrador');
       this.isDonante = roles.includes('donante');
+    });
+  }
+  private cargarPuntos(): void {
+    this.CampaniasService.obtenerMisPuntos().subscribe({
+      next: (p: number) => this.puntos = p,
+      error: (err: any) => {
+        console.error('Error al cargar puntos', err);
+        this.puntos = 0;
+      }
     });
   }
 

@@ -13,8 +13,9 @@ Sistema de donaciones con backend Spring Boot y frontend Angular.
 git clone <url-del-repositorio>
 cd monorepo-donaccion
 
-# 2. Crear variables de entorno ejemplo
-echo "MYSQL_ROOT_PASSWORD" > env
+# 2. Crear archivo de variables de entorno
+# Crea un archivo llamado 'env' en la raíz del proyecto con las variables necesarias
+# Ver sección "Variables de Entorno Requeridas" más abajo para el formato completo
 
 # 3. Levantar todo con Docker
 docker-compose up -d --build
@@ -30,7 +31,7 @@ docker-compose logs -f
 
 ## Instalación Detallada
 
-### Opción 1: Con Docker Compose (Recomendado) 🐳
+### Opción 1: Con Docker Compose (Recomendado)
 
 Esta es la forma más fácil y completa para levantar todo el proyecto de una vez:
 
@@ -47,10 +48,20 @@ Esta es la forma más fácil y completa para levantar todo el proyecto de una ve
    ```
 
 2. **Crear el archivo de variables de entorno:**
-   ```bash
-   # Crear archivo env en la raíz del proyecto
-
+   
+   Crea un archivo llamado `env` en la raíz del proyecto con el siguiente contenido:
+   ```env
+   MYSQL_ROOT_PASSWORD=tu_password_root
+   MYSQL_DATABASE=donaccion
+   MYSQL_USER=tu_usuario
+   MYSQL_PASSWORD=tu_password
+   
+   SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/donaccion
+   SPRING_DATASOURCE_USERNAME=tu_usuario
+   SPRING_DATASOURCE_PASSWORD=tu_password
    ```
+   
+   Reemplaza `tu_password_root`, `tu_usuario` y `tu_password` con valores reales.
 
 3. **Abrir Docker Desktop:**
    - Buscar "Docker Desktop" en el menú de inicio
@@ -97,7 +108,7 @@ Esta es la forma más fácil y completa para levantar todo el proyecto de una ve
 - **Health check**: http://localhost:8080/actuator/health
 - **API de prueba**: http://localhost:8080/api/ping (requiere autenticación JWT)
 
-### Opción 2: Desarrollo Local (Sin Docker) 💻
+### Opción 2: Desarrollo Local (Sin Docker)
 
 Si prefieres desarrollo local, puedes levantar cada servicio por separado:
 
@@ -147,7 +158,7 @@ monorepo-donaccion/
 └── .gitignore        # Archivos excluidos del control de versiones
 ```
 
-##  Variables de Entorno Requeridas
+## Variables de Entorno Requeridas
 
 Crea un archivo `env` en la raíz del proyecto con:
 
@@ -162,9 +173,9 @@ SPRING_DATASOURCE_USERNAME=tu_usuario
 SPRING_DATASOURCE_PASSWORD=tu_password
 ```
 
-** IMPORTANTE:** Este archivo está en `.gitignore` y NO debe subirse a GitHub.
+**IMPORTANTE:** Este archivo está en `.gitignore` y NO debe subirse a GitHub.
 
-##  Gestión y Mantenimiento
+## Gestión y Mantenimiento
 
 ### Comandos útiles para gestión
 ```bash
@@ -193,15 +204,22 @@ docker-compose down --volumes --remove-orphans
 docker rmi monorepo-donaccion-backend monorepo-donaccion-frontend
 
 # Limpieza completa de Docker (¡CUIDADO!)
-docker rm -f $(docker ps -aq)          # Eliminar TODOS los contenedores
-docker rmi -f $(docker images -q)       # Eliminar TODAS las imágenes
-docker volume prune -f                 # Eliminar TODOS los volúmenes
-docker network prune -f                # Eliminar TODAS las redes
+# Windows (PowerShell):
+docker rm -f (docker ps -aq)
+docker rmi -f (docker images -q)
+docker volume prune -f
+docker network prune -f
+
+# Linux/macOS:
+docker rm -f $(docker ps -aq)
+docker rmi -f $(docker images -q)
+docker volume prune -f
+docker network prune -f
 ```
 
 > **⚠️ ADVERTENCIA:** Los comandos de limpieza completa eliminarán **TODOS** los contenedores, imágenes y volúmenes de Docker en tu sistema, no solo los del proyecto.
 
-##  Troubleshooting
+## Troubleshooting
 
 ### Problemas comunes al levantar el proyecto
 
@@ -329,9 +347,9 @@ Este proyecto está configurado para desplegarse automáticamente en [Render](ht
 **Documentación completa:** Ver [RENDER_DEPLOYMENT.md](./RENDER_DEPLOYMENT.md) para instrucciones detalladas.
 
 #### URLs de Producción
-- **Frontend**: `https://donaccion-frontend.onrender.com`
-- **Backend API**: `https://donaccion-backend.onrender.com`
-- **Health Check**: `https://donaccion-backend.onrender.com/actuator/health`
+- **Frontend**: [https://donaccion-frontend.onrender.com](https://donaccion-frontend.onrender.com)
+- **Backend API**: [https://donaccion-backend.onrender.com](https://donaccion-backend.onrender.com)
+- **Health Check**: [https://donaccion-backend.onrender.com/actuator/health](https://donaccion-backend.onrender.com/actuator/health)
 
 #### Configuración de Variables de Entorno en Producción
 
@@ -341,9 +359,9 @@ Las variables de entorno deben configurarse manualmente en el Dashboard de Rende
 - `SPRING_DATASOURCE_URL`
 - `SPRING_DATASOURCE_USERNAME`
 - `SPRING_DATASOURCE_PASSWORD`
-- `SPRING_JPA_HIBERNATE_DDL_AUTO=
-- `SPRING_JPA_SHOW_SQL=
-- `SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=
+- `SPRING_JPA_HIBERNATE_DDL_AUTO=update` (o `none` para producción)
+- `SPRING_JPA_SHOW_SQL=false` (o `true` para desarrollo)
+- `SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQLDialect`
 - `SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI`
 - `SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_AUDIENCES`
 - `CORS_ALLOWED_ORIGINS`
@@ -369,7 +387,7 @@ curl https://donaccion-backend.onrender.com/actuator/health
 ```
 
 **Configuración de Monitores Externos:**
-- **URL a monitorear**: `https://donaccion-backend.onrender.com/actuator/health`
+- **URL a monitorear**: [https://donaccion-backend.onrender.com/actuator/health](https://donaccion-backend.onrender.com/actuator/health)
 - **Método**: GET
 - **Código esperado**: 200
 - **Intervalo recomendado**: 5 minutos
@@ -392,7 +410,7 @@ Este proyecto utiliza **GitHub Actions** para automatizar tareas de integración
 
 ### Workflows Configurados
 
-** Documentación completa:** Ver [GITHUB_ACTIONS_SYNC.md](./GITHUB_ACTIONS_SYNC.md)
+**Documentación completa:** Ver [GITHUB_ACTIONS_SYNC.md](./GITHUB_ACTIONS_SYNC.md)
 
 #### 1. Auto Sync Staging (`auto-sync-staging.yml`)
 - **Trigger**: Push a `main` o merge de PR a `main`
@@ -433,7 +451,7 @@ Este proyecto utiliza **GitHub Actions** para automatizar tareas de integración
 - Todos los cambios deben pasar por revisión de código
 
 ### Variables de Entorno
--  **NUNCA** commitees archivos `.env` o `env`
+- **NUNCA** commitees archivos `.env` o `env`
 - Las credenciales de base de datos están en el archivo `env` (ignorado por git)
 - Configura las variables de entorno en tu servidor de producción
 
