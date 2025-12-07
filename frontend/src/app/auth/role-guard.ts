@@ -1,24 +1,35 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Router, CanActivateFn } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { map } from 'rxjs/operators';
+import { map, filter, take, tap } from 'rxjs/operators'; 
 
-export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
+export const roleGuard: CanActivateFn = (route, state) => {
   const auth = inject(AuthService);
   const router = inject(Router);
-  const requiredRoles: string[] = route.data['roles'] || [];
+  
+  const ROLES_KEY = 'https://donaccion.org/roles';
 
   return auth.user$.pipe(
+
+    filter(user => !!user),
+
+    take(1),
+    
     map(user => {
-      const userRoles: string[] = user?.['https://donaccion.org/roles'] || [];
-      const hasAccess = requiredRoles.some(role => userRoles.includes(role));
+      const rawRoles = (user![ROLES_KEY] || user!['roles'] || []) as string[];
+      const expectedRoles = (route.data['roles'] as string[]) || [];
 
-      if (!hasAccess) {
-        router.navigate(['/fail-auth']);
+      const userRolesLower = rawRoles.map(r => r.toLowerCase());
+      const expectedRolesLower = expectedRoles.map(r => r.toLowerCase());
+
+      const hasRole = userRolesLower.some(role => expectedRolesLower.includes(role));
+
+      if (hasRole) {
+        return true;
+      } else {
+        console.warn('⛔ [RoleGuard] Bloqueando acceso. Redirigiendo...');
+        return router.createUrlTree(['/fail-auth']); 
       }
-
-      return hasAccess;
     })
   );
 };
-

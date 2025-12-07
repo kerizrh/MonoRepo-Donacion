@@ -1,257 +1,335 @@
+/* --- Estructura Página --- */
 .explorar-wrapper {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 1rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* Contenedor de filtros */
-.filtros {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.titulo-pagina {
+  color: #1f2937;
+  font-size: 1.8rem;
+  font-weight: 700;
   margin-bottom: 1.5rem;
 }
 
-/* Input de búsqueda principal */
-.input-busqueda {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
-}
-.input-busqueda:focus {
-  outline: none;
-  border-color: #1976d2;
-  box-shadow: 0 0 0 2px rgba(25,118,210,0.2);
+/* --- NUEVA SECCIÓN DE FILTROS (Estilo Imagen) --- */
+.filtros-container {
+  margin-bottom: 2.5rem;
 }
 
-/* ng-select general */
-.ng-select {
-  width: 100%;
-  font-size: 0.95rem;
-}
-.ng-select .ng-select-container {
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  min-height: 40px;
-  align-items: center;
-}
-.ng-select .ng-select-container:hover {
-  border-color: #1976d2;
-}
-.ng-select .ng-select-container.ng-has-value {
-  border-color: #1976d2;
-}
-
-/* Chips seleccionados dentro del ng-select */
-.ng-select .ng-value {
-  background: #1976d2;
-  color: #fff;
-  border-radius: 12px;
-  padding: 2px 8px;
-  margin: 2px;
-  font-size: 0.85rem;
-}
-.ng-select .ng-value .ng-value-icon {
-  color: #fff;
-  margin-left: 4px;
-  cursor: pointer;
-}
-
-/* Dropdown de opciones */
-.ng-select .ng-dropdown-panel {
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-}
-.ng-select .ng-option {
-  padding: 6px 10px;
-  font-size: 0.9rem;
-}
-.ng-select .ng-option:hover {
-  background: #f0f7ff;
-}
-.ng-select .ng-option-selected {
-  background: #e3f2fd;
-  font-weight: 500;
-}
-
-
-.chips {
+.filtros-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 1.5rem;
+  align-items: flex-end; /* Alinea los inputs abajo */
 }
 
-.chips span {
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-radius: 16px;
-  background: #f5f5f5;
+.filtro-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-group {
+  flex: 1.5; /* La búsqueda un poco más ancha */
+}
+
+/* Etiquetas estilo "Label" de la imagen */
+.filtro-group label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #4b5563; /* Gris oscuro */
+}
+
+/* Input de Búsqueda */
+.input-busqueda {
+  padding: 0 12px;
+  height: 42px; /* Altura consistente con ng-select */
+  border: 1px solid #d1d5db; /* Borde gris suave */
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.input-busqueda:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Ajustes visuales para ng-select para que parezca input nativo */
+::ng-deep .ng-select .ng-select-container {
+  border-radius: 6px !important;
+  border-color: #d1d5db !important;
+  min-height: 42px !important;
+  align-items: center;
+}
+::ng-deep .ng-select.ng-select-focused .ng-select-container {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Botón Limpiar Filtros (Estilo Link como en la imagen) */
+.filtros-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.8rem;
+}
+
+.btn-limpiar-link {
+  background: none;
+  border: none;
+  color: #3b82f6; /* Azul link */
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
-  user-select: none;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  padding: 0;
+}
+.btn-limpiar-link:hover {
+  text-decoration: underline;
+  color: #2563eb;
 }
 
-.chips span:hover {
-  background: #e0e0e0;
-}
-
-.chips span.selected {
-  background: #1976d2;
-  color: #fff;
-  border-color: #1976d2;
-}
-
+/* --- ESTILOS DE CARDS (Copiados del Dashboard para consistencia) --- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background: white;
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.card img {
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: #3b82f6;
+}
+
+.card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.img-container {
   width: 100%;
-  border-radius: 6px;
-  margin-bottom: 0.5rem;
+  height: 160px;
+  padding: 1rem 1rem 0 1rem;
+  box-sizing: border-box;
+}
+
+.img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.img-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #f1f5f9;
+  border-radius: 8px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.nombre {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #0f172a;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.estado {
+  font-size: 0.85rem;
+  text-align: right;
+  color: #64748b;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+/* Info creador extra */
+.creador-info {
+  margin-top: -5px;
+  color: #64748b;
+  font-size: 0.85rem;
 }
 
 .categorias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.barra-progreso-bg {
+  width: 100%;
+  height: 8px;
+  background-color: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
   margin-top: 0.5rem;
 }
 
-.categorias .chip {
-  display: inline-block;
-  background: #eee;
-  border-radius: 12px;
-  padding: 2px 8px;
-  margin: 2px;
-  font-size: 0.85em;
-}
-.btn-limpiar {
-  align-self: flex-start;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  background: #e53935;
-  color: #fff;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.2s;
+.barra-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #22c55e);
+  border-radius: 999px;
+  transition: width 240ms ease;
 }
 
-.btn-limpiar:hover {
-  background: #c62828;
+/* Stats Grid */
+.stats-grid {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+  padding-bottom: 0.5rem;
 }
+
+.stat-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stat-col.left { align-items: flex-start; }
+.stat-col.center { align-items: center; }
+.stat-col.right { align-items: flex-end; }
+
+.stat-col .label {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.stat-col .value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* --- Mensajes y Paginación --- */
+.mensaje-vacio {
+  text-align: center;
+  margin: 3rem 0;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
 .paginacion {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 1.5rem;
+  margin-top: 2rem;
   flex-wrap: wrap;
 }
 
 .paginacion button {
-  padding: 6px 12px;
-  border: 1px solid #1976d2;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
   background: #fff;
-  color: #1976d2;
+  color: #374151;
   cursor: pointer;
   transition: all 0.2s;
+  font-weight: 500;
 }
 
 .paginacion button:hover:not(:disabled) {
-  background: #1976d2;
-  color: #fff;
-}
-
-.paginacion button:disabled {
-  border-color: #ccc;
-  color: #aaa;
-  cursor: not-allowed;
+  border-color: #3b82f6;
+  color: #3b82f6;
 }
 
 .paginacion button.active {
-  background: #1976d2;
+  background: #3b82f6;
   color: #fff;
-  font-weight: bold;
+  border-color: #3b82f6;
 }
 
-.sin-campanias-inicial {
-  text-align: center;
-  margin-top: 30px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #555;
+.paginacion button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.sin-coincidencias {
-  text-align: center;
-  margin-top: 30px;
-  font-size: 18px;
-  font-weight: 600;
-  color: #555;
-}
+/* --- ESTILOS PREVIOS SE MANTIENEN --- */
+/* (Asegúrate de mantener todo el CSS anterior para el layout, cards, titulos, etc.) */
 
-.card .encabezado {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 0.5rem;
-}
-
-.card .encabezado h2 {
-  margin: 0;
-  flex: 1;
-}
-
-.card .encabezado .fecha {
-  font-size: 0.9rem;
-  color: #666;
-  font-weight: normal;
-}
-
-.card .descripcion {
-  margin: 0.5rem 0;
-  color: #555;
-}
-
-.card .meta {
-  margin: 0.75rem 0;
-  font-size: 0.9rem;
-}
-
-.card .meta > div {
-  margin: 0.25rem 0;
-}
-
-.card .meta .progreso {
-  font-weight: bold;
-  color: #1976d2;
-}
-
-.barra-progreso {
+/* --- AUTOCOMPLETE SUGGESTIONS --- */
+.autocomplete-wrapper {
+  position: relative; /* Clave para que la lista se posicione respecto a este input */
   width: 100%;
-  height: 8px;
-  background: #e0e0e0;
-  border-radius: 4px;
-  overflow: hidden;
-  margin: 0.5rem 0;
 }
 
-.barra-progreso .barra {
-  height: 100%;
-  background: #1976d2;
-  transition: width 0.3s ease;
+.sugerencias-list {
+  position: absolute;
+  top: 100%; /* Justo debajo del input */
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 50; /* Por encima de las cards */
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 4px 0 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sugerencias-list li {
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  color: #374151;
+  cursor: pointer;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.15s;
+}
+
+.sugerencias-list li:last-child {
+  border-bottom: none;
+}
+
+.sugerencias-list li:hover {
+  background-color: #eff6ff; /* Azul muy claro al pasar mouse */
+  color: #1d4ed8;
+}
+
+/* Scrollbar fina para la lista */
+.sugerencias-list::-webkit-scrollbar {
+  width: 6px;
+}
+.sugerencias-list::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 3px;
 }

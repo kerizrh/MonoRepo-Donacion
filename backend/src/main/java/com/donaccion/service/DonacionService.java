@@ -41,7 +41,7 @@ public class DonacionService {
         UsuarioPuntos up = usuarioPuntosRepo.findById(usuarioId)
                 .orElse(new UsuarioPuntos(usuarioId, 0));
         
-        int puntosNuevos = monto.intValue() * 10;
+        int puntosNuevos = monto.intValue();
         up.setPuntos(up.getPuntos() + puntosNuevos);
         usuarioPuntosRepo.save(up);
 

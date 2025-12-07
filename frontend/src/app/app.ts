@@ -24,9 +24,7 @@ export class App {
   constructor(public auth: AuthService, private CampaniasService: CampaniasService) {
     this.auth.isAuthenticated$.subscribe(isAuth => {
       this.isAuthenticated = isAuth;
-      if (isAuth && this.isDonante) {
-        this.cargarPuntos();
-      } else {
+      if (isAuth) {
         this.puntos = null;
       }
     });
@@ -43,8 +41,13 @@ export class App {
       this.isOsfl = roles.includes('osfl');
       this.isAdmin = roles.includes('administrador');
       this.isDonante = roles.includes('donante');
+
+      if (this.isDonante) {
+        this.cargarPuntos();
+      }
     });
   }
+  
   private cargarPuntos(): void {
     this.CampaniasService.obtenerMisPuntos().subscribe({
       next: (p: number) => this.puntos = p,

@@ -53,6 +53,16 @@ export class DetalleCampania implements OnInit {
     return dias + ' días restantes';
   }
 
+  get nombreCreador(): string {
+    // Intenta obtener creadorNombre, si no existe, muestra 'Organizador'
+    return this.data?.creadorNombre || 'Organización';
+  }
+
+  get imagenCreador(): string | null {
+    // Retorna la cadena base64 si existe, o null si no tiene foto
+    return this.data?.creadorImagen || null; 
+  }
+  
   // === LÓGICA DE DONACIÓN Y CADENA DE MODALES ===
 
   private showConfirmationAndAPICall(monto: number) {

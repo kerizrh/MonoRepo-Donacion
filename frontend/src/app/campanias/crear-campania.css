@@ -1,41 +1,266 @@
-.wrapper {
-  max-width: 720px;
-  margin: 2rem auto;
-  padding: 1.25rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+/* Contenedor Principal (Fondo gris) */
+.main-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: #ffffff;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Tarjeta Blanca */
+.card {
+  background: white;
+  width: 100%;
+  max-width: 600px;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Encabezado */
+header {
+  margin-bottom: 2rem;
 }
 
 h1 {
-  margin: 0 0 1rem;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
 }
 
-form {
-  display: grid;
-  gap: 1rem;
-}
-
-label {
-  display: grid;
-  gap: 0.5rem;
-  font-weight: 600;
-}
-
-input[type="text"], input[type="date"], textarea {
-  border: 1px solid #d1d5db;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+.subtitle {
+  color: #6b7280;
+  margin: 0;
   font-size: 1rem;
 }
 
-button {
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
+/* Formulario General */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.mensaje {
-  margin-top: 0.75rem;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.helper-text {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #374151;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+input::placeholder, textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Input con símbolo de moneda */
+.input-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.currency-symbol {
+  position: absolute;
+  left: 10px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+.input-icon-wrapper input {
+  padding-left: 1.5rem; /* Espacio para el $ */
+}
+
+/* Zona de Carga de Archivos (Dashed) */
+.file-dropzone {
+  border: 2px dashed #e5e7eb;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.file-dropzone:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.icon-placeholder {
+  margin-bottom: 0.5rem;
+}
+
+.file-dropzone p {
+  margin: 0.25rem 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+}
+
+.link-text {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.file-info {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* Previsualización de Imagen */
+.image-preview {
+  margin-top: 1rem;
+  position: relative;
+}
+.image-preview img {
+  width: 100%;
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.btn-remove-img {
+  margin-top: 5px;
+  background: transparent;
+  color: #ef4444;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Categorías (Input + Botón Verde) */
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-add {
+  background-color: #22c55e; /* Verde */
+  color: white;
+  border: none;
+  padding: 0 1.25rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-add:hover {
+  background-color: #16a34a;
+}
+
+/* Chips (Etiquetas) */
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 0.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.chip-blue {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.chip-green {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.btn-chip-close {
+  background: transparent;
+  border: none;
+  color: inherit;
+  margin-left: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.6;
+}
+.btn-chip-close:hover {
+  opacity: 1;
+}
+
+/* Botón Crear Campaña (Full Width Blue) */
+.btn-submit {
+  width: 100%;
+  background-color: #3b82f6; /* Azul brillante */
+  color: white;
+  padding: 0.9rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.btn-submit:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .form-row {
+    grid-template-columns: 1fr; /* Una columna en móvil */
+    gap: 1rem;
+  }
+  .card {
+    padding: 1.5rem;
+  }
 }

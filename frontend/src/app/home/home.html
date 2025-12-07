@@ -1,0 +1,83 @@
+<div class="dashboard-wrapper">
+  
+    <section class="welcome-hero">
+      <h1>Bienvenido de nuevo, <span class="text-highlight">{{ userName }}</span></h1>
+      <p class="subtitle" *ngIf="esDonante">Explora nuevas causas y ayuda a cambiar el mundo hoy.</p>
+      <p class="subtitle" *ngIf="esOsfl">Gestiona tus iniciativas y revisa el impacto de tu organización.</p>
+    </section>
+  
+    <section class="actions-grid">
+      
+      <div class="action-card" routerLink="/campanias/nueva" *ngIf="esOsfl">
+        <div class="icon-circle blue-theme"><i class="bi bi-plus-lg"></i></div>
+        <h3>Crear Campaña</h3>
+        <p>Lanza una nueva iniciativa para recaudar fondos.</p>
+      </div>
+  
+      <div class="action-card" routerLink="/explorar" *ngIf="esDonante">
+        <div class="icon-circle green-theme"><i class="bi bi-search"></i></div>
+        <h3>Buscar Campañas</h3>
+        <p>Encuentra causas que te apasionen.</p>
+      </div>
+  
+      <div class="action-card" routerLink="/profile">
+        <div class="icon-circle yellow-theme"><i class="bi bi-person-gear"></i></div>
+        <h3>Mi Perfil</h3>
+        <p>Gestiona tu cuenta y datos personales.</p>
+      </div>
+  
+      <div class="action-card" routerLink="/campanias" *ngIf="esOsfl">
+        <div class="icon-circle green-theme"><i class="bi bi-list-check"></i></div>
+        <h3>Mis Campañas</h3>
+        <p>Administra y edita tus campañas activas.</p>
+      </div>
+  
+    </section>
+  
+    <section class="recommendations-section" *ngIf="esDonante">
+      <h2 class="section-title">Campañas Recomendadas para ti</h2>
+  
+      <div *ngIf="cargando" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+  
+      <div class="campanias-grid" *ngIf="!cargando && recomendadas.length > 0">
+        <div class="card-campania" *ngFor="let c of recomendadas" [routerLink]="['/campanias', c.id]">
+          <div class="img-wrapper">
+              <img *ngIf="c.imagen" [src]="'data:image/*;base64,'+c.imagen" [alt]="c.nombre">
+              <div *ngIf="!c.imagen" class="no-img-placeholder"><i class="bi bi-image"></i></div>
+          </div>
+          <div class="card-content">
+            <h3 class="campania-title">{{ c.nombre }}</h3>
+            <p class="campania-desc">{{ c.descripcion }}</p>
+            <div class="progress-container">
+              <div class="progress-bar-bg">
+                <div class="progress-fill" [style.width.%]="calcPorcentaje(c)"></div>
+              </div>
+              <div class="progress-stats">
+                <span>Recaudado: {{ c.montoRecaudado | currency:'USD':'symbol':'1.0-0' }}</span>
+                <span class="meta-text">Meta: {{ c.metaFondos | currency:'USD':'symbol':'1.0-0' }}</span>
+              </div>
+            </div>
+            <button class="btn-donar-card">Donar ahora</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="osfl-dashboard-section" *ngIf="esOsfl">
+      <h2 class="section-title">Panel de Organización</h2>
+      
+      <div class="osfl-welcome-card">
+        <div class="osfl-content">
+          <h3>¡Impulsa tu impacto!</h3>
+          <p>Tienes acceso total para crear y gestionar campañas de recaudación.</p>
+          <button class="btn-primary-action" routerLink="/campanias">Ver mis campañas</button>
+        </div>
+        <div class="osfl-icon">
+          <i class="bi bi-buildings" style="font-size: 5rem; color: #cbd5e1;"></i>
+        </div>
+      </div>
+    </section>
+  
+  </div>

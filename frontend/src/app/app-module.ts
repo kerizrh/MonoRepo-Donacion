@@ -9,6 +9,7 @@ import { CrearCampania } from './campanias/crear-campania';
 import { AuthModule } from '@auth0/auth0-angular';
 import { Profile } from './profile/profile';
 import { Landing } from './landing/landing';
+import { Home } from './home/home';
 import { Ping } from './ping/ping';
 import { PingService } from './ping';
 
@@ -27,6 +28,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     App,
     Profile,
     Landing,
+    Home,
     Ping,
     FailAuth,
     ExplorarCampaniasComponent

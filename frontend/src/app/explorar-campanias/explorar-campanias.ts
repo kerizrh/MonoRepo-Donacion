@@ -13,10 +13,16 @@ export class ExplorarCampaniasComponent implements OnInit {
   campanias: CampaniaPublica[] = [];
   campaniasFiltradas: CampaniaPublica[] = [];
 
-  // filtros
+  // Filtros Generales
   texto = '';
-  creadoresDisponibles: string[] = [];
-  creadoresSeleccionados: string[] = [];
+  
+  // Filtro Organización (Autocomplete logic)
+  creadorTexto = ''; // Lo que escribe el usuario
+  creadoresDisponibles: string[] = []; // Lista completa única
+  sugerenciasCreadores: string[] = []; // Lista filtrada para el dropdown
+  mostrarSugerencias = false;
+
+  // Filtro Categorías
   categoriasDisponibles: string[] = [];
   categoriasSeleccionadas: string[] = [];
 
@@ -35,6 +41,7 @@ export class ExplorarCampaniasComponent implements OnInit {
       next: (list) => {
         this.campanias = list;
         this.campaniasFiltradas = list;
+        // Obtener lista única de creadores
         this.creadoresDisponibles = [...new Set(list.map(c => c.creadorNombre))];
         this.categoriasDisponibles = [...new Set(list.flatMap(c => c.categorias))];
         this.cargando = false;
@@ -49,33 +56,68 @@ export class ExplorarCampaniasComponent implements OnInit {
 
   aplicarFiltros() {
     this.campaniasFiltradas = this.campanias
-      .filter(c => !this.texto || c.nombre.toLowerCase().includes(this.texto.toLowerCase()) || c.descripcion.toLowerCase().includes(this.texto.toLowerCase()))
-      .filter(c => this.creadoresSeleccionados.length === 0 || this.creadoresSeleccionados.includes(c.creadorNombre))
-      .filter(c => this.categoriasSeleccionadas.length === 0 || c.categorias.some(cat => this.categoriasSeleccionadas.includes(cat)));
-      this.currentPage = 1;
+      // 1. Filtro por búsqueda general (nombre o desc)
+      .filter(c => !this.texto || 
+        c.nombre.toLowerCase().includes(this.texto.toLowerCase()) || 
+        c.descripcion.toLowerCase().includes(this.texto.toLowerCase())
+      )
+      // 2. Filtro por Creador (Texto exacto o parcial según decidas, aquí es parcial)
+      .filter(c => !this.creadorTexto || 
+        c.creadorNombre.toLowerCase().includes(this.creadorTexto.toLowerCase())
+      )
+      // 3. Filtro por Categorías
+      .filter(c => this.categoriasSeleccionadas.length === 0 || 
+        c.categorias.some(cat => this.categoriasSeleccionadas.includes(cat))
+      );
+      
+    this.currentPage = 1;
   }
 
-  toggleCreador(nombre: string) {
-    if (this.creadoresSeleccionados.includes(nombre)) {
-      this.creadoresSeleccionados = this.creadoresSeleccionados.filter(c => c !== nombre);
+  // === Lógica del Autocomplete de Organización ===
+  
+  onInputCreador() {
+    if (!this.creadorTexto) {
+      this.sugerenciasCreadores = [];
+      this.mostrarSugerencias = false;
     } else {
-      this.creadoresSeleccionados.push(nombre);
+      const term = this.creadorTexto.toLowerCase();
+      this.sugerenciasCreadores = this.creadoresDisponibles.filter(c => 
+        c.toLowerCase().includes(term)
+      );
+      this.mostrarSugerencias = this.sugerenciasCreadores.length > 0;
     }
+    this.aplicarFiltros(); // Filtrar tabla mientras escribe
+  }
+
+  seleccionarSugerencia(nombre: string) {
+    this.creadorTexto = nombre;
+    this.mostrarSugerencias = false;
     this.aplicarFiltros();
   }
 
-  toggleCategoria(cat: string) {
-    if (this.categoriasSeleccionadas.includes(cat)) {
-      this.categoriasSeleccionadas = this.categoriasSeleccionadas.filter(c => c !== cat);
-    } else {
-      this.categoriasSeleccionadas.push(cat);
-    }
-    this.aplicarFiltros();
+  // Pequeño delay al perder foco para permitir el click en la lista
+  onBlurCreador() {
+    setTimeout(() => {
+      this.mostrarSugerencias = false;
+    }, 200);
   }
+
+  onFocusCreador() {
+    if (this.creadorTexto) {
+      this.onInputCreador(); // Volver a mostrar si ya hay texto
+    } else {
+       // Opcional: Mostrar todos si está vacío al hacer click
+       // this.sugerenciasCreadores = this.creadoresDisponibles;
+       // this.mostrarSugerencias = true;
+    }
+  }
+
+  // === Resto de lógica ===
 
   limpiarFiltros() {
     this.texto = '';
-    this.creadoresSeleccionados = [];
+    this.creadorTexto = ''; // Limpiar input creador
+    this.sugerenciasCreadores = [];
     this.categoriasSeleccionadas = [];
     this.aplicarFiltros();
   }
@@ -95,7 +137,6 @@ export class ExplorarCampaniasComponent implements OnInit {
     }
   }
 
-  // === agregado para mostrar meta/recaudado/progreso ===
   fechaRestanteTexto(c: CampaniaPublica): string {
     const hoy = new Date();
     const fin = new Date(c.fechaLimite + 'T00:00:00');
