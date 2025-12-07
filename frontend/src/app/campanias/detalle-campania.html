@@ -1,63 +1,81 @@
-<div class="detalle-wrapper" *ngIf="!cargando; else loadingTpl">
+<div class="page-container" *ngIf="!cargando; else loadingTpl">
   <ng-container *ngIf="data; else errorTpl">
 
-  
-    <section class="hero" *ngIf="data.imagen">
-      <img [src]="'data:image/*;base64,' + data.imagen" alt="Banner de campaña" />
-      <a href="#detalleInfo" class="scroll-indicator" aria-label="Ver información">▼</a>
-    </section>
+    <div class="layout-grid">
+      
+      <div class="main-column">
+        
+        <div class="media-container" *ngIf="data.imagen">
+          <img [src]="'data:image/*;base64,' + data.imagen" alt="Banner de campaña" />
+        </div>
+        
+        <div *ngIf="!data.imagen" class="media-placeholder">
+          <span>{{ data.nombre }}</span>
+        </div>
 
-    <section *ngIf="!data.imagen" class="hero hero--sin-imagen">
-      <h1>{{ data.nombre }}</h1>
-      <a href="#detalleInfo" class="scroll-indicator" aria-label="Ver información">▼</a>
-    </section>
-
-    <section id="detalleInfo" class="detalle-contenido">
-      <h1 class="titulo">{{ data.nombre }}</h1>
-
-      <div class="meta">
-        <div><strong>Fecha:</strong> {{ data.fechaLimite }} ({{ fechaTexto }})</div>
-        <div><strong>Meta:</strong> {{ data.metaFondos | currency:'USD':'symbol':'1.2-2' }}</div>
-        <div><strong>Recaudado:</strong> {{ data.montoRecaudado | currency:'USD':'symbol':'1.2-2' }}</div>
-        <div><strong>Progreso:</strong> {{ progreso }}%</div>
+        <div class="story-section">
+          <h2 class="section-title big-text-color">Sobre esta campaña</h2>
+          <div class="descripcion">
+            {{ data.descripcion || 'El organizador no ha proporcionado una descripción detallada.' }}
+          </div>
+        </div>
       </div>
 
-      <div class="barra-progreso">
-        <div class="barra" [style.width.%]="progreso"></div>
-      </div>
+      <aside class="sidebar-column">
+        <div class="donation-card">
+          
+          <h1 class="campaign-title">{{ data.nombre }}</h1>
 
-      <div class="donacion-container" style="margin-top: 2rem; padding: 2rem; background-color: white; border: none; border-radius: 12px; text-align: center;">
-  
-  <h3 style="color: #0c0c0c; margin-bottom: 1rem;">¿Quieres apoyar esta causa?</h3>
-  
-  <p style="color: #374151; margin-bottom: 1.5rem;">
-    Tu aporte hace la diferencia. Además, recibirás 
-    <span style="font-weight: bold; color: #15803d;">puntos de recompensa</span> 
-    por tu generosidad.
-  </p>
+          <div class="organizer-info">
+            
+            <img *ngIf="imagenCreador" 
+                 [src]="'data:image/*;base64,' + imagenCreador" 
+                 class="avatar-img" 
+                 alt="Foto del organizador">
 
-  <button (click)="donar()" 
-          style="background-color: #16a34a; color: white; padding: 0.75rem 2rem; font-size: 1.1rem; font-weight: bold; border: none; border-radius: 9999px; cursor: pointer; transition: background-color 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-    💖 Donar ahora
-  </button>
+            <div *ngIf="!imagenCreador" class="avatar-placeholder">
+              {{ nombreCreador.charAt(0).toUpperCase() }}
+            </div>
 
-</div>
-      <h3>Categorías</h3>
-      <div class="categorias">
-        <span *ngFor="let cat of data.categorias" class="chip">{{ cat }}</span>
-      </div>
+            <div class="organizer-text">
+              <span class="label">Organizador</span>
+              <span class="name">{{ nombreCreador }}</span>
+            </div>
+          </div>
 
-      <h3>Descripción</h3>
-      <p class="descripcion">{{ data.descripcion || '—' }}</p>
-    </section>
+          <div class="tags-container">
+            <span *ngFor="let cat of data.categorias" class="tag">{{ cat }}</span>
+          </div>
+
+          <div class="progress-section">
+            <div class="bar-bg">
+              <div class="bar-fill" [style.width.%]="progreso"></div>
+            </div>
+          </div>
+
+          <div class="stats-display">
+            <div class="amount-main">
+              {{ data.montoRecaudado | currency:'USD':'symbol':'1.0-0' }}
+              <span class="amount-goal">recaudados de {{ data.metaFondos | currency:'USD':'symbol':'1.0-0' }}</span>
+            </div>
+          </div>
+
+          <button (click)="donar()" class="btn-donate-primary">
+            💖 Donar ahora
+          </button>
+
+        </div>
+      </aside>
+
+    </div>
 
   </ng-container>
 </div>
 
 <ng-template #loadingTpl>
-  <p>Cargando...</p>
+  <div class="loading-state">Cargando campaña...</div>
 </ng-template>
 
 <ng-template #errorTpl>
-  <p style="color:#b00;">{{ error || 'No se pudo cargar la campaña.' }}</p>
+  <div class="error-state">{{ error || 'No se pudo cargar la campaña.' }}</div>
 </ng-template>

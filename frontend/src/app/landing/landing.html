@@ -1,60 +1,64 @@
-<div class="container mt-5">
-  <div class="text-center mb-4">
+<div class="landing-container">
+  
+  <div class="header-section text-center">
     <h1>Bienvenido a DonAcción</h1>
-    <p>Una plataforma de donaciones con propósito, trazabilidad y participación activa.</p>
+    <p class="subtitle">Una plataforma de donaciones con propósito, trazabilidad y participación activa.</p>
   </div>
 
-  <div class="row">
-    <!-- Card 1 -->
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 text-center">
-        <div class="card-body">
-          <div class="mb-3">
-            <i class="bi bi-rocket-takeoff" style="font-size:2rem; color:#007bff;"></i>
-          </div>
-          <h5 class="card-title">Impulsa tu causa</h5>
-          <p class="card-text">
-            Haz visible tu causa y convierte la esperanza en acción: construyamos un mundo mejor una donación a la vez.
-          </p>
-          <a routerLink="#" class="btn btn-outline-primary btn-sm">Quiero impulsar</a>
-        </div>
-      </div>
+  <div class="step-row">
+    <div class="step-content text-left">
+      <span class="step-label color-blue">PASO 1</span>
+      <h2>Impulsa tu causa</h2>
+      <p>
+        Haz visible tu causa y convierte la esperanza en acción: construyamos un mundo mejor una donación a la vez.
+      </p>
     </div>
-
-    <!-- Card 2 -->
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 text-center">
-        <div class="card-body">
-          <div class="mb-3">
-            <i class="bi bi-gift" style="font-size:2rem; color:#28a745;"></i>
-          </div>
-          <h5 class="card-title">Puntos de donación</h5>
-          <p class="card-text">
-            Como agradecimiento, DonAcción otorga puntos a los donantes que luego pueden canjear por recompensas de patrocinadores.
-          </p>
-          <a routerLink="#" class="btn btn-outline-success btn-sm">Quiero donar</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 3 -->
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 text-center">
-        <div class="card-body">
-          <div class="mb-3">
-            <i class="bi bi-people" style="font-size:2rem; color:#ffc107;"></i>
-          </div>
-          <h5 class="card-title">Patrocinio</h5>
-          <p class="card-text">
-            Invitamos a empresas solidarias a ofrecer recompensas de puntos, ganando visibilidad mientras impulsan causas que importan.
-          </p>
-          <a routerLink="#" class="btn btn-outline-warning btn-sm">Quiero patrocinar</a>
-        </div>
+    <div class="step-visual">
+      <div class="graphic-circle circle-blue">
+        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" 
+             alt="Cohete 3D" 
+             class="step-icon-img" />
       </div>
     </div>
   </div>
 
-  <div class="text-center mt-5">
-    <a class="btn btn-primary btn-lg" routerLink="/login">Comenzar ahora</a>
+  <div class="step-row reverse-layout">
+    <div class="step-content text-right">
+      <span class="step-label color-green">PASO 2</span>
+      <h2>Puntos de donación</h2>
+      <p>
+        Como agradecimiento, DonAcción otorga puntos a los donantes que luego pueden canjear por recompensas de patrocinadores.
+      </p>
+    </div>
+    <div class="step-visual">
+      <div class="deco-square"></div>
+      <div class="graphic-circle circle-green">
+        <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Green%20heart/3D/green_heart_3d.png" 
+             alt="Donación 3D" 
+             class="step-icon-img" />
+      </div>
+    </div>
   </div>
+
+  <div class="step-row">
+    <div class="step-content text-left">
+      <span class="step-label color-yellow">PASO 3</span>
+      <h2>Patrocinio</h2>
+      <p>
+        Invitamos a empresas solidarias a ofrecer recompensas de puntos, ganando visibilidad mientras impulsan causas que importan.
+      </p>
+    </div>
+    <div class="step-visual">
+      <div class="graphic-circle circle-yellow dashed-border">
+        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Briefcase.png" 
+             alt="Maletín 3D" 
+             class="step-icon-img" />
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section text-center">
+    <a class="btn-cta" routerLink="/login">Comenzar ahora</a>
+  </div>
+
 </div>

@@ -1,139 +1,277 @@
-/* Desplazamiento suave al hacer clic en la flecha */
-:root { scroll-behavior: smooth; }
-
-.detalle-wrapper { display: block; }
-
-/* HERO con estilo profesional - no ocupa toda la pantalla */
-.hero {
-  max-width: 1200px;
-  margin: 2rem auto 0;
-  padding: 0 1rem;
-  position: relative;
-  overflow: hidden;
+:root {
+  --primary-blue: #2c6e91; /* Azul similar al botón de la imagen */
+  --primary-hover: #1e5b88;
+  --progress-green: #22c55e;
+  --text-dark: #1f2937;
+  --text-gray: #6b7280;
+  --bg-gray: #f9fafb;
 }
 
-.hero img {
+.page-container {
+  max-width: 1100px; /* Ancho contenido similar a la imagen */
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #fff; /* O el color de fondo de tu app */
+}
+
+/* --- GRID LAYOUT --- */
+.layout-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Móvil por defecto */
+  gap: 2rem;
+}
+
+/* En pantallas grandes (Tablet/Desktop) activamos 2 columnas */
+@media (min-width: 900px) {
+  .layout-grid {
+    grid-template-columns: 1.6fr 1fr; /* Izquierda más ancha, Derecha tarjeta */
+    align-items: start; /* Para que la tarjeta no se estire */
+  }
+}
+
+/* --- COLUMNA IZQUIERDA --- */
+.media-container {
   width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.media-container img {
+  width: 100%;
+  height: auto;
   max-height: 500px;
   object-fit: cover;
-  object-position: center;
-  border-radius: 16px;
   display: block;
-  background: #f5f5f5;
 }
 
-/* En pantallas pequeñas, altura más reducida */
-@media (max-width: 768px) {
-  .hero {
-    margin: 1rem auto 0;
-    padding: 0 0.75rem;
-  }
-  
-  .hero img {
-    max-height: 300px;
-    border-radius: 12px;
-  }
-}
-
-/* Si no hay imagen, mostramos título centrado en el hero */
-.hero--sin-imagen {
-  text-align: center;
-  padding: 3rem 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 16px;
-  color: #fff;
-  margin: 2rem auto;
-  max-width: 1200px;
-}
-
-.hero--sin-imagen h1 {
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 600;
-}
-
-.scroll-indicator {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  text-decoration: none;
-  font-size: 20px;
-  line-height: 1;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.9);
-  color: #333;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-  opacity: 0.8;
-}
-
-.scroll-indicator:hover {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Ocultar scroll indicator en móviles */
-@media (max-width: 768px) {
-  .scroll-indicator {
-    display: none;
-  }
-}
-
-/* CONTENIDO DETALLADO */
-.detalle-contenido {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 2rem 1rem 3rem;
-}
-
-@media (max-width: 768px) {
-  .detalle-contenido {
-    padding: 1.5rem 0.75rem 2rem;
-  }
-}
-
-.titulo {
-  margin: 0 0 8px 0;
-}
-
-.meta {
+.media-placeholder {
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(135deg, #e0e7ff 0%, #cbd5e1 100%);
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin: 8px 0 12px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #475569;
+  margin-bottom: 2rem;
 }
 
-.barra-progreso {
-  height: 12px;
-  background: #eee;
-  border-radius: 999px;
-  overflow: hidden;
-  margin-bottom: 16px;
-}
-
-.barra {
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #3b82f6, #22c55e);
-  transition: width 240ms ease;
+.section-title {
+  font-size: 1.5rem;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+  font-weight: 700;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
 }
 
 .descripcion {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #374151;
   white-space: pre-wrap;
-  line-height: 1.6;
-  color: #222;
 }
-.categorias {
-  margin: 8px 0;
+
+/* --- COLUMNA DERECHA (TARJETA) --- */
+.donation-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Sombra suave */
+  border: 1px solid #f3f4f6;
+  position: sticky; /* Hace que siga al usuario al bajar en desktop */
+  top: 2rem; 
 }
-.chip {
-  display: inline-block;
-  background: #eee;
-  border-radius: 12px;
-  padding: 2px 8px;
-  margin: 2px;
-  font-size: 0.85em;
+
+.campaign-title {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
 }
+
+.big-text-color {
+  color: #09128e;
+}
+
+/* Info Organizador */
+.organizer-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+/* Estilo para la foto real del usuario */
+.avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover; /* Asegura que no se deforme si no es cuadrada */
+  border: 1px solid #e5e7eb;
+}
+
+/* El placeholder se mantiene igual */
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  background-color: #e5e7eb;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.organizer-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.organizer-text .label {
+  color: var(--text-gray);
+  font-size: 0.8rem;
+}
+
+.organizer-text .name {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* Tags / Categorias */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.tag {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Barra Progreso */
+.progress-section {
+  margin-bottom: 0.5rem;
+}
+
+.bar-bg {
+  width: 100%;
+  height: 10px;
+  background-color: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #22c55e);
+  border-radius: 999px;
+  transition: width 240ms ease;
+}
+
+
+/* Stats Financieros */
+.stats-display {
+  margin-bottom: 1.5rem;
+}
+
+.amount-main {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.amount-goal {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #6b7280;
+  margin-left: 4px;
+}
+
+.donors-count {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* Botón Donar */
+.btn-donate-primary {
+  width: 100%;
+  background-color: #16a34a;
+  color: white;
+  border: none;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  box-shadow: 0 4px 6px rgba(44, 110, 145, 0.2);
+}
+
+.btn-donate-primary:hover {
+  background-color: #08d955;
+}
+
+/* Compartir */
+.share-section {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.share-section p {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 0.75rem;
+}
+
+.share-icons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #4b5563;
+  transition: all 0.2s;
+}
+
+.btn-icon:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+/* Loading / Error */
+.loading-state, .error-state {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: var(--text-gray);
+}
+.error-state { color: #dc2626; }

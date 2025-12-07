@@ -124,6 +124,9 @@ export class CampaniasService {
         return this.http.get<{ puntos: number }>(url, { headers });
       }),
       map(resp => resp.puntos),
+      tap(puntos => {
+        this.puntosActualizados.next(puntos); 
+      }),
       catchError(err => {
         console.error('[puntos][error]', err);
         return throwError(() => err);
