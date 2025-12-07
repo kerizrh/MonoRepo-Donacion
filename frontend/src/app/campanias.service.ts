@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '@auth0/auth0-angular';
-import { Observable, switchMap, throwError } from 'rxjs';
+import { Observable, switchMap, throwError, map, BehaviorSubject } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 
@@ -18,6 +18,8 @@ export interface CampaniaPayload {
 @Injectable({ providedIn: 'root' })
 export class CampaniasService {
   private readonly apiBase = `${environment.apiUrl}/api/campanias`;
+  private puntosActualizados = new BehaviorSubject<number | null>(null);
+  puntosActualizados$ = this.puntosActualizados.asObservable();
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
@@ -81,15 +83,52 @@ export class CampaniasService {
   }
 
   delete(id: number): Observable<void> {
+  return this.auth.getAccessTokenSilently().pipe(
+    switchMap(token => {
+      const headers = this.authHeaders(token);
+      return this.http.delete<void>(`${this.apiBase}/${id}`, { headers });
+    }),
+    catchError(err => {
+      console.error('[delete][error]', err);
+      return throwError(() => err);
+    })
+  );
+}
+
+
+  donar(campaniaId: number, monto: number): Observable<{ mensaje: string; puntos: number }> {
+  return this.auth.getAccessTokenSilently().pipe(
+    switchMap(token => {
+      const headers = this.authHeaders(token);
+      const url = `${environment.apiUrl}/api/donaciones`;
+
+      return this.http.post<{ mensaje: string; puntos: number }>(
+        url,
+        { campaniaId, monto },
+        { headers }
+      ).pipe(
+        tap(resp => {
+          console.log("Backend devolvió puntos:", resp.puntos); // DEBUG
+          this.puntosActualizados.next(resp.puntos); // 👈 ACTUALIZA EL HEADER
+        })
+      );
+    })
+  );
+}
+
+    obtenerMisPuntos(): Observable<number> {
     return this.auth.getAccessTokenSilently().pipe(
       switchMap(token => {
         const headers = this.authHeaders(token);
-        return this.http.delete<void>(`${this.apiBase}/${id}`, { headers });
+        const url = `${environment.apiUrl}/api/donaciones/mis-puntos`;
+        return this.http.get<{ puntos: number }>(url, { headers });
       }),
+      map(resp => resp.puntos),
       catchError(err => {
-        console.error('[delete][error]', err);
+        console.error('[puntos][error]', err);
         return throwError(() => err);
       })
     );
   }
+
 }

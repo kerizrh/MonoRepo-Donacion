@@ -26,6 +26,22 @@
         <div class="barra" [style.width.%]="progreso"></div>
       </div>
 
+      <div class="donacion-container" style="margin-top: 2rem; padding: 2rem; background-color: white; border: none; border-radius: 12px; text-align: center;">
+  
+  <h3 style="color: #0c0c0c; margin-bottom: 1rem;">¿Quieres apoyar esta causa?</h3>
+  
+  <p style="color: #374151; margin-bottom: 1.5rem;">
+    Tu aporte hace la diferencia. Además, recibirás 
+    <span style="font-weight: bold; color: #15803d;">puntos de recompensa</span> 
+    por tu generosidad.
+  </p>
+
+  <button (click)="donar()" 
+          style="background-color: #16a34a; color: white; padding: 0.75rem 2rem; font-size: 1.1rem; font-weight: bold; border: none; border-radius: 9999px; cursor: pointer; transition: background-color 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+    💖 Donar ahora
+  </button>
+
+</div>
       <h3>Categorías</h3>
       <div class="categorias">
         <span *ngFor="let cat of data.categorias" class="chip">{{ cat }}</span>

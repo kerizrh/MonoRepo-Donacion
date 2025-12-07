@@ -3,53 +3,96 @@
 
 .detalle-wrapper { display: block; }
 
-/* HERO a pantalla completa */
+/* HERO con estilo profesional - no ocupa toda la pantalla */
 .hero {
-  height: 100vh;                 /* ocupa toda la altura visible */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;              /* “letterbox” para imágenes horizontales/verticales */
+  max-width: 1200px;
+  margin: 2rem auto 0;
+  padding: 0 1rem;
   position: relative;
   overflow: hidden;
 }
 
 .hero img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;                   /* mantiene proporción real */
-  height: auto;                  /* imagen completa, sin recorte */
-  object-fit: contain;           /* clave: que se vea completa */
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 16px;
   display: block;
+  background: #f5f5f5;
+}
+
+/* En pantallas pequeñas, altura más reducida */
+@media (max-width: 768px) {
+  .hero {
+    margin: 1rem auto 0;
+    padding: 0 0.75rem;
+  }
+  
+  .hero img {
+    max-height: 300px;
+    border-radius: 12px;
+  }
 }
 
 /* Si no hay imagen, mostramos título centrado en el hero */
 .hero--sin-imagen {
-  color: #fff;
   text-align: center;
-  background: linear-gradient(180deg, #111, #222);
+  padding: 3rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  color: #fff;
+  margin: 2rem auto;
+  max-width: 1200px;
+}
+
+.hero--sin-imagen h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .scroll-indicator {
   position: absolute;
-  bottom: 16px;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   text-decoration: none;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1;
-  padding: 8px 12px;
+  padding: 10px 14px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.12);
-  color: #fff;
-  backdrop-filter: saturate(120%) blur(6px);
+  background: rgba(255,255,255,0.9);
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  opacity: 0.8;
+}
+
+.scroll-indicator:hover {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Ocultar scroll indicator en móviles */
+@media (max-width: 768px) {
+  .scroll-indicator {
+    display: none;
+  }
 }
 
 /* CONTENIDO DETALLADO */
 .detalle-contenido {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 24px 16px 56px;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem 1rem 3rem;
+}
+
+@media (max-width: 768px) {
+  .detalle-contenido {
+    padding: 1.5rem 0.75rem 2rem;
+  }
 }
 
 .titulo {
